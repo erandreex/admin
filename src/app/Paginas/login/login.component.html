@@ -1,0 +1,27 @@
+<div class="auth">
+    <div class="auth-layout">
+        <div class="logo">
+            <img src="https://i.imgur.com/bYacHHK.png" class="logo-img" />
+            <h1 class="titulo">Ukianime</h1>
+        </div>
+
+        <div class="auth-page">
+            <form class="form-layout" autocomplete="off" [formGroup]="loginForm">
+                <h2>Iniciar sesión</h2>
+                <input type="text" formControlName="credencial" placeholder="Usuario" />
+                <input type="password" formControlName="password" placeholder="Contraseña" />
+
+                <a class="forgotpass" routerLink="../restablecer">¿Olvidaste la contraseña?</a>
+
+                <button (click)="login()" [disabled]="loginForm.invalid" class="button">
+                    <div *ngIf="load" class="loader"></div>
+                    <span *ngIf="!load">Ingresar</span>
+                </button>
+
+                <span>¿Aún no tienes cuenta? <a class="registrarse" routerLink="../signup">Registrate</a></span>
+            </form>
+
+            {{ error }}
+        </div>
+    </div>
+</div>

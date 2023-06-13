@@ -1,0 +1,59 @@
+@import url("../../../assets/css/form.css");
+@import url("../../../assets/css/loader.css");
+@import url("../../../assets/css/logo.css");
+
+.forgotpass {
+    margin-top: 10px;
+}
+
+.registrarse {
+    font-weight: 700;
+}
+
+.loader {
+    width: 30px;
+    height: 30px;
+}
+
+@media screen and (min-width: 500px) {
+    .login-layout {
+        width: min(500px, 500px);
+    }
+    .titulo {
+        font-size: 3rem;
+    }
+    .logo-img {
+        height: 2.5rem;
+    }
+}
+
+a {
+    color: var(--text-color);
+    font-weight: 700;
+    align-self: flex-start;
+}
+
+.auth {
+    background-color: gray;
+    min-height: 100vh;
+    padding-top: 5vh;
+}
+
+.auth-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+    width: min(100%, 500px);
+    padding: 20px;
+}
+
+.auth-page {
+    width: 100%;
+}
+
+@media screen and (min-width: 500px) {
+    .auth-page {
+        width: min(350px, 500px);
+    }
+}

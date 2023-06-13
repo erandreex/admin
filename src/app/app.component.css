@@ -1,0 +1,25 @@
+@import url("../assets/css/estilos.css");
+
+.wrapper.toggled {
+    left: 70px;
+}
+
+.wrapper.toggled .page-content {
+    margin-left: 70px;
+}
+
+.wrapper.toggled {
+    left: 0px;
+}
+
+/* .wrapper.toggled .top-header .navbar {
+    left: 70px;
+}
+
+.wrapper.toggled .page-content {
+    margin-left: 70px;
+}
+
+.wrapper.toggled .footer {
+    left: 0px;
+} */

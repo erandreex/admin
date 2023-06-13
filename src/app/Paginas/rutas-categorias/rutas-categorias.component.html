@@ -1,0 +1,39 @@
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex align-items-center">
+            <h5 class="mb-0">Rutas</h5>
+            <form class="ms-auto position-relative">
+                <div class="position-absolute top-50 translate-middle-y search-icon px-3">
+                    <i class="bi bi-search"></i>
+                </div>
+                <input class="form-control ps-5" type="text" placeholder="search" />
+            </form>
+        </div>
+        <div class="table-responsive mt-3">
+            <table class="table align-middle">
+                <thead class="table-secondary">
+                    <tr>
+                        <th>Id</th>
+                        <th>Orden</th>
+                        <th>Titulo</th>
+                        <th>Ruta</th>
+                        <th>Icono</th>
+                        <th>Color Principal</th>
+                        <th>Color Secundario</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let ruta of rutas">
+                        <td>{{ ruta.id }}</td>
+                        <td>{{ ruta.orden }}</td>
+                        <td>{{ ruta.titulo }}</td>
+                        <td>{{ ruta.ruta }}</td>
+                        <td>{{ ruta.icono }}</td>
+                        <td>{{ ruta.color_1 }}</td>
+                        <td>{{ ruta.color_2 }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

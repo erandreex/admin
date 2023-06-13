@@ -1,0 +1,210 @@
+/* Sidebar */
+
+.sidebar-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 260px;
+    max-width: 260px;
+    height: 100%;
+    background-color: var(--main-background);
+    background-clip: padding-box;
+    border-right: 1px solid var(--theme-color-border);
+    transition: all 0.2s;
+    z-index: 16;
+    display: grid;
+    grid-template-rows: 60px 1fr;
+}
+
+.sidebar-wrapper > * {
+    width: 100%;
+}
+
+.sidebar-header {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    background: var(--main-background);
+    border-right: 1px solid var(--theme-color-border);
+    border-bottom: 1px solid var(--theme-color-border);
+    background-clip: padding-box;
+}
+
+.sidebar-header .logo-icon {
+    width: 35px;
+}
+
+.sidebar-header .logo-text {
+    font-size: 24px;
+    letter-spacing: 1px;
+    color: var(--text-color);
+    margin: 0;
+}
+
+.toggle-icon {
+    font-size: 26px;
+    cursor: pointer;
+    color: var(--text-color);
+    margin-left: auto;
+}
+
+ul.sub-menu {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    transition: height 0.2s ease-in-out;
+    height: 0;
+    visibility: hidden;
+    opacity: 0;
+}
+
+/* Active menu */
+
+li.menu-active a.has-arrow {
+    color: var(--primary-color);
+}
+
+ul.show-menu {
+    display: block;
+    visibility: visible;
+    opacity: 1;
+}
+
+.metismenu {
+    display: flex;
+    padding: 10px;
+    flex-direction: column;
+    overflow-y: auto;
+    gap: 5px;
+}
+
+.metismenu li:first-child {
+    margin-top: 8px;
+}
+
+.metismenu li:last-child {
+    margin-bottom: 10px;
+}
+
+.metismenu > li {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.metismenu a {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    padding: 10px 10px;
+    border-radius: 4px;
+    font-size: 15px;
+    color: var(--text-primary-color);
+    outline-width: 0;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    letter-spacing: 0.5px;
+    border-left: 4px solid rgba(255, 255, 255, 0);
+}
+
+.metismenu a .parent-icon {
+    font-size: 25px;
+    line-height: 1;
+}
+
+.metismenu a .menu-title {
+    margin-left: 10px;
+}
+
+.metismenu ul a {
+    padding: 6px 15px 6px 15px;
+    font-size: 15px;
+    border: 0;
+    border-left: 4px solid rgba(255, 255, 255, 0);
+}
+
+.metismenu ul a i {
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+.metismenu ul {
+    border: 1px solid #ffffff00;
+    background: rgb(255 255 255 / 0%);
+}
+
+.metismenu a:active,
+.metismenu a:focus,
+.metismenu a:hover {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    /* box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 50%); */
+    border-left: 4px solid rgb(255, 255, 255);
+    cursor: pointer;
+}
+
+.menu-label {
+    padding: 20px 15px 5px 5px;
+    color: var(--text-secondary-color);
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+}
+
+.metismenu .has-arrow:after {
+    position: absolute;
+    content: "";
+    width: 0.5em;
+    height: 0.5em;
+    border-style: solid;
+    border-width: 1.2px 0 0 1.2px;
+    border-color: initial;
+    right: 15px;
+    transform: rotate(-45deg) translateY(-50%);
+    transform-origin: top;
+    top: 50%;
+    transition: all 0.3s ease-out;
+}
+
+@media screen and (min-width: 1025px) {
+    .sidebar-wrapper.toggled .sidebar-header .logo-text {
+        display: none;
+    }
+    .sidebar-wrapper.toggled {
+        width: 70px;
+    }
+    .sidebar-wrapper.toggled.sidebar-hovered {
+        box-shadow: 0 0.3rem 0.8rem rgba(0, 0, 0, 0.12) !important;
+    }
+    .sidebar-wrapper.toggled .sidebar-header {
+        width: 70px;
+    }
+    .sidebar-wrapper.toggled .sidebar-header .toggle-icon {
+        display: none;
+    }
+    .sidebar-wrapper.toggled .sidebar-header {
+        justify-content: center;
+    }
+    .sidebar-wrapper.toggled .sidebar-header {
+        width: 70px;
+    }
+    .sidebar-wrapper.toggled .metismenu a {
+        justify-content: center;
+        border-left: 0px solid #3461ff;
+    }
+    .sidebar-wrapper.toggled .metismenu .menu-title {
+        display: none;
+    }
+    .sidebar-wrapper.toggled .metismenu li ul {
+        display: none;
+    }
+    .sidebar-wrapper.toggled .metismenu li.menu-label {
+        display: none;
+    }
+    .sidebar-wrapper.toggled .metismenu .has-arrow:after {
+        display: none;
+    }
+}
