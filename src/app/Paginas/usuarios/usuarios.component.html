@@ -1,0 +1,127 @@
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex align-items-center">
+            <h5 class="mb-0">Usuarios</h5>
+
+            <form class="ms-auto position-relative">
+                <div class="position-absolute top-50 translate-middle-y search-icon px-3">
+                    <i class="ri-search-line"></i>
+                </div>
+                <input class="form-control ps-5" type="text" placeholder="search" />
+            </form>
+
+            <div class="col">
+                <button data-toggle="modal" data-target="#modalUsuario" type="button" class="btn btn-success px-5">
+                    Agregar
+                </button>
+            </div>
+        </div>
+        <div class="table-responsive mt-3">
+            <table class="table align-middle">
+                <thead class="table-secondary">
+                    <tr>
+                        <th>Id</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Username</th>
+                        <th>Correo</th>
+                        <th>Estado</th>
+                        <th>Rol ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let usuario of usuarios">
+                        <td>{{ usuario.id }}</td>
+                        <td>{{ usuario.nombre }}</td>
+                        <td>{{ usuario.apellido }}</td>
+                        <td>{{ usuario.username }}</td>
+                        <td>{{ usuario.correo }}</td>
+                        <td>{{ usuario.estado }}</td>
+                        <td>{{ usuario.rol_id }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal HTML -->
+<div id="modalUsuario" class="modal fade" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Formulario Usuarios</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="formularioUsuario" class="row g-3">
+                    <input hidden type="text" class="form-control" formControlName="id" />
+
+                    <div class="col-12">
+                        <label for="formularioUsuarioId" class="form-label">Nombre</label>
+                        <input id="formularioUsuarioId" type="text" class="form-control" formControlName="nombre" />
+                        <span *ngIf="campoNoesValido('nombre')" class="form-text text-danger">Es requerido</span>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="formularioUsuarioApellido" class="form-label">Apellido</label>
+                        <input
+                            id="formularioUsuarioApellido"
+                            type="text"
+                            class="form-control"
+                            formControlName="apellido"
+                        />
+                        <span *ngIf="campoNoesValido('apellido')" class="form-text text-danger">Es requerido</span>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="formularioUsuarioUsername" class="form-label">Username</label>
+                        <input
+                            id="formularioUsuarioUsername"
+                            type="text"
+                            class="form-control"
+                            formControlName="username"
+                        />
+                        <span *ngIf="campoNoesValido('username')" class="form-text text-danger">Es requerido</span>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="formularioUsuarioPassword" class="form-label">Password</label>
+                        <input
+                            id="formularioUsuarioPassword"
+                            type="password"
+                            class="form-control"
+                            formControlName="password"
+                        />
+                        <span *ngIf="campoNoesValido('password')" class="form-text text-danger">Es requerido</span>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="formularioUsuarioCorreo" class="form-label">Correo</label>
+                        <input id="formularioUsuarioCorreo" type="text" class="form-control" formControlName="correo" />
+                        <span *ngIf="campoNoesValido('correo')" class="form-text text-danger">Es requerido</span>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="formularioUsuarioRolId" class="form-label">Rol</label>
+
+                        <select
+                            id="formularioUsuarioRolId"
+                            class="form-select"
+                            aria-label="Rol"
+                            formControlName="rol_id"
+                        >
+                            <option selected value=""></option>
+                            <option value="5d258050-5ee3-4954-8ec4-1b010355b817">ADMIN</option>
+                        </select>
+                        <span *ngIf="campoNoesValido('rol_id')" class="form-text text-danger">Es requerido</span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" (click)="guadar()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>

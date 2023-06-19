@@ -9,9 +9,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { RutasCategoriasComponent } from './rutas-categorias/rutas-categorias.component';
 import { UsuariosRolesComponent } from './usuarios-roles/usuarios-roles.component';
+import { UsuariosComponent } from './usuarios/usuarios.component';
+import { RutasAccionesComponent } from './rutas-acciones/rutas-acciones.component';
 
 @NgModule({
-    declarations: [IndexComponent, RutasComponent, NotFoundComponent, RutasCategoriasComponent, UsuariosRolesComponent],
+    declarations: [IndexComponent, RutasComponent, NotFoundComponent, RutasCategoriasComponent, UsuariosRolesComponent, UsuariosComponent, RutasAccionesComponent],
     imports: [CommonModule, PaginasRoutingModule, ComponentesModule, ReactiveFormsModule],
 })
 export class PaginasModule {}

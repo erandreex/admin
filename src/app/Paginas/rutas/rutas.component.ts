@@ -15,8 +15,6 @@ export class RutasComponent implements OnInit {
     ngOnInit(): void {
         this.rutasService.listar().subscribe((resp) => {
             this.rutas = resp.respuesta.rutas;
-
-            console.log(this.rutas);
         });
     }
 }

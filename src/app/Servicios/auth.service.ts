@@ -36,7 +36,6 @@ export class AuthService {
 
         return this.http.post<ModeloRespuesta<any>>(url, body).pipe(
             tap((resp) => {
-                console.log(resp);
                 if (resp.ok) {
                     localStorage.setItem(this.lstoken, resp.token);
                 }

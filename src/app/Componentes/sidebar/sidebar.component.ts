@@ -68,7 +68,6 @@ export class SidebarComponent implements OnInit {
             temporalRutas.forEach((e) => {
                 contador = contador + 1;
 
-                console.log(e.ruta_orden);
                 if (temporalRutasOrdenadas[e.ruta_orden]) {
                     temporalRutasOrdenadas[temporalLongitudRutas + contador] = e;
                 } else {

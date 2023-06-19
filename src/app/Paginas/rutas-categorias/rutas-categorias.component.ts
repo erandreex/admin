@@ -15,8 +15,6 @@ export class RutasCategoriasComponent {
     ngOnInit(): void {
         this.rutasCategoriasService.listar().subscribe((resp) => {
             this.rutas = resp.respuesta.rutas;
-
-            console.log(this.rutas);
         });
     }
 }
