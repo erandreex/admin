@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
 export class IndexComponent {
     public sidebarExpand: boolean = true;
 
-    holaquehace($event: boolean) {
+    sidebarExpandMethod($event: boolean) {
         this.sidebarExpand = $event;
     }
 }

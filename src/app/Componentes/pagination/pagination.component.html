@@ -1,0 +1,55 @@
+<div class="col-12 row d-flex align-content-center justify-content-center">
+    <div class="col-6 row d-flex align-content-center">
+        <p class="indices">Mostrando {{ indiceInicial }} a {{ indiceFinal }} de {{ arrayInfo.length }} registros</p>
+    </div>
+
+    <div class="col-6 row d-flex align-content-end justify-content-end">
+        <ul class="pagination d-flex align-content-center justify-content-center">
+            <li class="page-item" [class.disabled]="paginaActual === 1">
+                <a class="page-link" (click)="onPreviousPage(1)">Anterior</a>
+            </li>
+
+            <li class="page-item excluir">
+                <a class="page-link"> {{ paginaActual }} / {{ paginaMaxima }}</a>
+            </li>
+
+            <li class="page-item" [class.disabled]="paginaActual === paginaMaxima">
+                <a class="page-link" (click)="onNextPage(1)">Siguiente</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="col-12 row d-flex align-content-center justify-content-center">
+    <div class="col-4 row d-flex align-content-center">
+        <p class="indices">Mostrando {{ indiceInicial }} a {{ indiceFinal }} de {{ arrayInfo.length }} registros</p>
+    </div>
+
+    <div class="col-8 row d-flex align-content-center justify-content-center">
+        <ul class="pagination">
+            <li class="page-item" [class.disabled]="paginaActual === 1">
+                <a class="page-link" tabindex="-1" (click)="onPreviousPage(1)">Anterior</a>
+            </li>
+
+            <li
+                class="page-item dot-pagination"
+                (click)="onFirstPage()"
+                id="paginaInicial"
+                *ngIf="paginaActual > 2 && paginaMaxima > 3"
+            >
+                <i class="fas fa-circle mainSecondaryBackColor iconoFlotante"></i>
+
+                <span>{{ paginaMinima }}</span>
+            </li>
+
+            <li
+                class="page-item disabled dot-pagination puntitos"
+                id="paginaPuntoInicial"
+                ng
+                *ngIf="paginaActual > 2 && paginaMaxima > 2"
+            >
+                <i class="fas fa"></i>
+            </li>
+        </ul>
+    </div>
+</div>

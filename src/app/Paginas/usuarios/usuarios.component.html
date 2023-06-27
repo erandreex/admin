@@ -10,7 +10,7 @@
                 <input class="form-control ps-5" type="text" placeholder="search" />
             </form>
 
-            <div class="col">
+            <div class="col-6">
                 <button data-toggle="modal" data-target="#modalUsuario" type="button" class="btn btn-success px-5">
                     Agregar
                 </button>
@@ -54,7 +54,7 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <form [formGroup]="formularioUsuario" class="row g-3">
+                <form [formGroup]="formularioUsuario" class="row g-3" *ngIf="!banderaCargando">
                     <input hidden type="text" class="form-control" formControlName="id" />
 
                     <div class="col-12">
@@ -112,15 +112,19 @@
                             formControlName="rol_id"
                         >
                             <option selected value=""></option>
-                            <option value="5d258050-5ee3-4954-8ec4-1b010355b817">ADMIN</option>
+                            <option *ngFor="let rol of usuariosRoles" [value]="rol.id">{{ rol.nombre }}</option>
                         </select>
                         <span *ngIf="campoNoesValido('rol_id')" class="form-text text-danger">Es requerido</span>
                     </div>
                 </form>
+
+                <div *ngIf="banderaCargando">
+                    <div class="spinner"></div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" (click)="guadar()">Save</button>
+                <button type="button" class="btn btn-primary" (click)="guardarNuevoUsuario()">Save</button>
             </div>
         </div>
     </div>

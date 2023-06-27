@@ -7,13 +7,20 @@ import { RutasCategoriasComponent } from './rutas-categorias/rutas-categorias.co
 import { UsuariosRolesComponent } from './usuarios-roles/usuarios-roles.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { RutasAccionesComponent } from './rutas-acciones/rutas-acciones.component';
+import { routeGuard } from '../Utilidades/Guards/route.guard';
+import { ForbiddenComponent } from './forbidden/forbidden.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 const routes: Routes = [
     {
         path: '',
         component: IndexComponent,
-        data: { hola: 'que hace' },
+        canActivateChild: [routeGuard],
         children: [
+            {
+                path: '',
+                component: DashboardComponent,
+            },
             {
                 path: 'administracion/rutas',
                 component: RutasComponent,
@@ -34,7 +41,16 @@ const routes: Routes = [
                 path: 'administracion/usuarios',
                 component: UsuariosComponent,
             },
-
+            {
+                path: 'forbidden',
+                component: ForbiddenComponent,
+            },
+        ],
+    },
+    {
+        path: '',
+        component: IndexComponent,
+        children: [
             {
                 path: '**',
                 component: NotFoundComponent,

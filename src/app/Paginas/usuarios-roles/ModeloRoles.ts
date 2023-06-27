@@ -6,3 +6,7 @@ export interface ModeloRol {
 export interface RespuestaModeloRol {
     roles: ModeloRol[];
 }
+
+export interface RespuestaCreacionRol {
+    rol: ModeloRol;
+}

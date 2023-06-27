@@ -1,20 +1,21 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { ModeloRespuesta } from '../Modelos/ModeloRespuesta';
 import { Observable, catchError, map, of } from 'rxjs';
-import { Rutas } from '../Modelos/ModeloRutas';
+import { Rutas } from '../../Modelos/ModeloRutas';
+import { ModeloRespuesta } from '../../Modelos/ModeloRespuesta';
 
 @Injectable({
     providedIn: 'root',
 })
-export class ComponentesService {
-    private baseUrl: string = environment.baseUrl;
+export class SidebarService {
+    private apiUrl: string = environment.baseUrl;
+    private baseUrl: string = '/permisos/consultas';
 
     constructor(private http: HttpClient) {}
 
     obtenerRutas(): Observable<ModeloRespuesta<Rutas>> {
-        const url = `${this.baseUrl}/permisos/consultas/rutas`;
+        const url = `${this.apiUrl}${this.baseUrl}/rutas`;
         const headers = new HttpHeaders({
             Authorization: `Bearer ${localStorage.getItem('token')}`,
         });

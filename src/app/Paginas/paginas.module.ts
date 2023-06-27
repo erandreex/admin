@@ -11,9 +11,21 @@ import { RutasCategoriasComponent } from './rutas-categorias/rutas-categorias.co
 import { UsuariosRolesComponent } from './usuarios-roles/usuarios-roles.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { RutasAccionesComponent } from './rutas-acciones/rutas-acciones.component';
+import { ForbiddenComponent } from './forbidden/forbidden.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
-    declarations: [IndexComponent, RutasComponent, NotFoundComponent, RutasCategoriasComponent, UsuariosRolesComponent, UsuariosComponent, RutasAccionesComponent],
+    declarations: [
+        IndexComponent,
+        RutasComponent,
+        NotFoundComponent,
+        RutasCategoriasComponent,
+        UsuariosRolesComponent,
+        UsuariosComponent,
+        RutasAccionesComponent,
+        ForbiddenComponent,
+        DashboardComponent,
+    ],
     imports: [CommonModule, PaginasRoutingModule, ComponentesModule, ReactiveFormsModule],
 })
 export class PaginasModule {}

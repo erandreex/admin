@@ -11,3 +11,7 @@ export interface ModeloRutaCategoria {
 export interface RespuestaModeloRutaCategoria {
     rutas: ModeloRutaCategoria[];
 }
+
+export interface RespuestaCreacionRutaCategoria {
+    ruta: ModeloRutaCategoria;
+}

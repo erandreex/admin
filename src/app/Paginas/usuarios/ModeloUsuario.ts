@@ -11,6 +11,16 @@ export interface ModeloUsuario {
     rol_id: string;
 }
 
+export interface ModeloRoles {
+    id: string;
+    nombre: string;
+}
+
 export interface RespuestaModeloUsuario {
     usuarios: ModeloUsuario[];
+    roles: ModeloRoles[];
+}
+
+export interface RespuestaCreacionUsuario {
+    usuario: ModeloUsuario;
 }

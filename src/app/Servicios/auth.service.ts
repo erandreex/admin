@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, map, of, tap } from 'rxjs';
 import { ModeloRespuesta } from '../Modelos/ModeloRespuesta';
 
@@ -8,26 +8,18 @@ import { ModeloRespuesta } from '../Modelos/ModeloRespuesta';
     providedIn: 'root',
 })
 export class AuthService {
-    public _auth: boolean = false;
+    public _auth: boolean = true;
 
     private baseUrl: string = environment.baseUrl;
-    private lstoken: string = 'token';
 
     constructor(private http: HttpClient) {}
 
-    registro(email: string, password: string) {
-        const url = `${this.baseUrl}/auth/registro`;
-        const body = { email, password };
+    get auth(): boolean {
+        return this._auth;
+    }
 
-        return this.http.post<ModeloRespuesta<any>>(url, body).pipe(
-            tap((resp) => {
-                if (resp.ok) {
-                    localStorage.setItem(this.lstoken, resp.token);
-                }
-            }),
-            map((resp) => resp),
-            catchError((err) => of(err))
-        );
+    set auth(value: boolean) {
+        this._auth = value;
     }
 
     login(credencial: string, password: string): Observable<ModeloRespuesta<any>> {
@@ -37,7 +29,8 @@ export class AuthService {
         return this.http.post<ModeloRespuesta<any>>(url, body).pipe(
             tap((resp) => {
                 if (resp.ok) {
-                    localStorage.setItem(this.lstoken, resp.token);
+                    localStorage.setItem('token', resp.token);
+                    this.auth = true;
                 }
             }),
             map((resp) => resp),
@@ -45,7 +38,16 @@ export class AuthService {
         );
     }
 
-    route(): boolean {
-        return true;
+    route(componente: string): Observable<ModeloRespuesta<any>> {
+        const url = `${this.baseUrl}/acceso/ruta/${componente}`;
+
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        });
+
+        return this.http.get<ModeloRespuesta<any>>(url, { headers }).pipe(
+            map((resp) => resp),
+            catchError((err) => of(err))
+        );
     }
 }

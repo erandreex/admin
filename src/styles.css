@@ -1238,3 +1238,5 @@ body.modal-open {
 @import "../src/assets/css/header-colors.css";
 /* @import "../src/assets/css/icons.css"; */
 @import "../src/assets/css/pace.min.css";
+
+@import "../src/assets/css/loader.css";

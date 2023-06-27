@@ -5,10 +5,12 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { RouterModule } from '@angular/router';
 import { UtilidadesModule } from '../Utilidades/utilidades.module';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
+import { ModalsComponent } from './modals/modals.component';
+import { PaginationComponent } from './pagination/pagination.component';
 
 @NgModule({
-    declarations: [HeaderComponent, SidebarComponent, BreadcrumbComponent],
+    declarations: [HeaderComponent, SidebarComponent, BreadcrumbComponent, ModalsComponent, PaginationComponent],
     imports: [CommonModule, RouterModule, UtilidadesModule],
-    exports: [HeaderComponent, SidebarComponent, BreadcrumbComponent],
+    exports: [HeaderComponent, SidebarComponent, BreadcrumbComponent, ModalsComponent, PaginationComponent],
 })
 export class ComponentesModule {}

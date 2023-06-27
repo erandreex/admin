@@ -1,19 +1,24 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UsuariosService } from './usuarios.service';
 import { ModeloUsuario } from './ModeloUsuario';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../../Servicios/auth.service';
+import { delay } from 'rxjs';
+import { ModeloRol } from '../usuarios-roles/ModeloRoles';
 
 @Component({
     selector: 'app-usuarios',
     templateUrl: './usuarios.component.html',
     styleUrls: ['./usuarios.component.css'],
 })
-export class UsuariosComponent implements OnInit, OnDestroy {
-    constructor(private usuariosService: UsuariosService, private fb: FormBuilder) {}
-
+export class UsuariosComponent implements OnInit {
     public usuarios: ModeloUsuario[] = [];
+    public usuariosRoles: ModeloRol[] = [];
+    public usuariosCreado!: ModeloUsuario;
 
-    public observableLista: any;
+    public mensaje: string = '';
+
+    public banderaCargando: boolean = false;
 
     public formularioUsuario: FormGroup = this.fb.group({
         id: ['123'],
@@ -25,33 +30,56 @@ export class UsuariosComponent implements OnInit, OnDestroy {
         rol_id: ['rol_id', Validators.required],
     });
 
+    constructor(private authService: AuthService, private usuariosService: UsuariosService, private fb: FormBuilder) {}
+
     ngOnInit(): void {
-        this.obtenerListaUsuarios();
+        this.obtenerListaUsuariosRoles();
     }
 
-    obtenerListaUsuarios() {
-        this.observableLista = this.usuariosService.listar().subscribe((resp) => {
-            this.usuarios = resp.respuesta.usuarios;
+    obtenerListaUsuariosRoles() {
+        if (!this.authService.auth) return;
+
+        this.usuariosService.listar().subscribe({
+            next: (resp) => {
+                if (resp.ok) {
+                    this.usuariosRoles = resp.respuesta.roles;
+                    this.usuarios = resp.respuesta.usuarios;
+                } else {
+                    console.log('Error', resp);
+                }
+            },
+            error: (err) => console.log('Error: ', err),
+            complete() {},
         });
     }
 
-    guadar() {
+    guardarNuevoUsuario() {
+        if (!this.authService.auth) return;
+
         if (this.formularioUsuario.invalid) {
             this.formularioUsuario.markAllAsTouched();
             return;
         }
 
-        this.usuariosService.registro(this.formularioUsuario.value).subscribe((resp) => {
-            console.log(resp);
-        });
+        this.banderaCargando = true;
+        this.usuariosService
+            .registro(this.formularioUsuario.value)
+            .pipe(delay(1000))
+            .subscribe({
+                next: (resp) => {
+                    if (resp.ok) {
+                        this.usuariosCreado = resp.respuesta.usuario;
+                    } else {
+                        console.log('Error', resp);
+                    }
+                    this.banderaCargando = false;
+                },
+                error: (err) => console.log('Error: ', err),
+                complete() {},
+            });
     }
 
     campoNoesValido(campo: string) {
         return this.formularioUsuario.controls[campo].errors && this.formularioUsuario.controls[campo].touched;
-    }
-
-    ngOnDestroy(): void {
-        if (this.observableLista) {
-        }
     }
 }

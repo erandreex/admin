@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { ComponentesService } from '../componentes.service';
-import { Ruta, RutaListaHTML, Rutas } from 'src/app/Modelos/ModeloRutas';
+import { Ruta, RutaListaHTML } from 'src/app/Modelos/ModeloRutas';
+import { SidebarService } from './sidebar.service';
+import { AuthService } from '../../Servicios/auth.service';
 
 @Component({
     selector: 'app-sidebar',
@@ -23,19 +24,27 @@ export class SidebarComponent implements OnInit {
 
     public ordenCategorias: number[] = [];
 
-    constructor(private componentesService: ComponentesService) {}
+    public source: any;
+
+    constructor(private sidebarService: SidebarService, private authService: AuthService) {}
 
     ngOnInit(): void {
-        this.componentesService.obtenerRutas().subscribe({
-            next: (val) => {
-                if (val.ok) {
-                    this.rutas = val.respuesta.rutas;
+        this.obtenerLista();
+    }
+
+    obtenerLista() {
+        if (!this.authService.auth) return;
+
+        this.sidebarService.obtenerRutas().subscribe({
+            next: (resp) => {
+                if (resp.ok) {
+                    this.rutas = resp.respuesta.rutas;
                     this.ordenarLista();
                 } else {
-                    console.log('Error');
+                    console.log('Error', resp);
                 }
             },
-            error: (err) => console.log('errr', err),
+            error: (err) => console.log('Error: ', err),
             complete() {},
         });
     }

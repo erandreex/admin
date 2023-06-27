@@ -8,6 +8,17 @@
                 </div>
                 <input class="form-control ps-5" type="text" placeholder="search" />
             </form>
+
+            <div class="col-6">
+                <button
+                    data-toggle="modal"
+                    data-target="#modalRutasCategorias"
+                    type="button"
+                    class="btn btn-success px-5"
+                >
+                    Agregar
+                </button>
+            </div>
         </div>
         <div class="table-responsive mt-3">
             <table class="table align-middle">
@@ -23,17 +34,128 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let ruta of rutas">
-                        <td>{{ ruta.id }}</td>
-                        <td>{{ ruta.orden }}</td>
-                        <td>{{ ruta.titulo }}</td>
-                        <td>{{ ruta.ruta }}</td>
-                        <td>{{ ruta.icono }}</td>
-                        <td>{{ ruta.color_1 }}</td>
-                        <td>{{ ruta.color_2 }}</td>
+                    <tr *ngFor="let rutaCategoria of rutasCategorias">
+                        <td>{{ rutaCategoria.id }}</td>
+                        <td>{{ rutaCategoria.orden }}</td>
+                        <td>{{ rutaCategoria.titulo }}</td>
+                        <td>{{ rutaCategoria.ruta }}</td>
+                        <td>{{ rutaCategoria.icono }}</td>
+                        <td>{{ rutaCategoria.color_1 }}</td>
+                        <td>{{ rutaCategoria.color_2 }}</td>
                     </tr>
                 </tbody>
             </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal HTML -->
+<div
+    id="modalRutasCategorias"
+    class="modal fade"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Formulario Usuarios</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="formularioUsuario" class="row g-3" *ngIf="!banderaCargando && !mensaje">
+                    <input hidden type="text" class="form-control" formControlName="id" />
+
+                    <div class="col-12">
+                        <label for="formularioRutaCategoriaTitulo" class="form-label">Titulo</label>
+                        <input
+                            id="formularioRutaCategoriaTitulo"
+                            type="text"
+                            class="form-control"
+                            formControlName="titulo"
+                        />
+                        <span *ngIf="campoNoesValido('titulo')" class="form-text text-danger">Es requerido</span>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="formularioRutaCategoriaRuta" class="form-label">Ruta</label>
+                        <input
+                            id="formularioRutaCategoriaRuta"
+                            type="text"
+                            class="form-control"
+                            formControlName="ruta"
+                        />
+                        <span *ngIf="campoNoesValido('ruta')" class="form-text text-danger">Es requerido</span>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="formularioRutaCategoriaIcono" class="form-label">Icono</label>
+                        <input
+                            id="formularioRutaCategoriaIcono"
+                            type="text"
+                            class="form-control"
+                            formControlName="icono"
+                        />
+                        <span *ngIf="campoNoesValido('icono')" class="form-text text-danger">Es requerido</span>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="formularioRutaCategoriaColor1" class="form-label">Color 1</label>
+                        <input
+                            id="formularioRutaCategoriaColor1"
+                            type="text"
+                            class="form-control"
+                            formControlName="color_1"
+                        />
+                        <span *ngIf="campoNoesValido('color_1')" class="form-text text-danger">Es requerido</span>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="formularioRutaCategoriaColor2" class="form-label">Color 2</label>
+                        <input
+                            id="formularioRutaCategoriaColor2"
+                            type="text"
+                            class="form-control"
+                            formControlName="color_2"
+                        />
+                        <span *ngIf="campoNoesValido('color_2')" class="form-text text-danger">Es requerido</span>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="formularioRutaCategoriaOrden" class="form-label">Orden</label>
+                        <input
+                            id="formularioRutaCategoriaOrden"
+                            type="text"
+                            class="form-control"
+                            formControlName="orden"
+                        />
+                        <span *ngIf="campoNoesValido('orden')" class="form-text text-danger">Es requerido</span>
+                    </div>
+                </form>
+
+                <div *ngIf="banderaCargando">
+                    <div class="spinner"></div>
+                </div>
+
+                <div *ngIf="!banderaCargando && mensaje">
+                    <p>{{ mensaje }}</p>
+                    <div *ngIf="rutaCategoria">
+                        {{ rutaCategoria | json }}
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" *ngIf="!rutaCategoria" data-dismiss="modal">
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-primary" *ngIf="!rutaCategoria" (click)="guardarRutaCategoria()">
+                    Save
+                </button>
+                <button type="button" class="btn btn-primary" *ngIf="rutaCategoria" (click)="cerrarModal()">
+                    Aceptar
+                </button>
+            </div>
         </div>
     </div>
 </div>
