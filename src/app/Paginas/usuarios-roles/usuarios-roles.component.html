@@ -1,7 +1,10 @@
 <div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Usuarios Roles</h5>
+    </div>
+
     <div class="card-body">
         <div class="d-flex align-items-center">
-            <h5 class="mb-0">Roles</h5>
             <form class="ms-auto position-relative">
                 <div class="position-absolute top-50 translate-middle-y search-icon px-3">
                     <i class="bi bi-search"></i>
@@ -9,7 +12,13 @@
                 <input class="form-control ps-5" type="text" placeholder="search" />
             </form>
             <div class="col-6">
-                <button data-toggle="modal" data-target="#modalUsuarioRoles" type="button" class="btn btn-success px-5">
+                <button
+                    data-toggle="modal"
+                    data-target="#modalUsuarioRoles"
+                    type="button"
+                    class="btn btn-success px-5"
+                    (click)="banderaCrear = true; abrirModal()"
+                >
                     Agregar
                 </button>
             </div>
@@ -25,16 +34,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let rolu of roles">
-                        <td>{{ rolu.id }}</td>
-                        <td>{{ rolu.nombre }}</td>
+                    <tr *ngFor="let rol of roles">
+                        <td>{{ rol.id }}</td>
+                        <td>{{ rol.nombre }}</td>
 
                         <td>
                             <button
-                                data-toggle="modal"
-                                data-target="#modalUsuarioRoles"
                                 type="button"
                                 class="btn btn-secondary"
+                                (click)="banderaCrear = false; rolSeleccionado = rol; abrirModal()"
                             >
                                 Editar
                             </button>
@@ -46,7 +54,7 @@
                                 data-target="#modalRemoverConfirmacionUsuarioRoles"
                                 type="button"
                                 class="btn btn-danger"
-                                (click)="rol = rolu; mensaje = ''"
+                                (click)="rolSeleccionado = rol; mensaje = ''"
                             >
                                 Eliminar
                             </button>
@@ -83,15 +91,26 @@
 
                 <div *ngIf="!banderaCargando && mensaje">
                     <p>{{ mensaje }}</p>
-                    <div *ngIf="rol">
-                        {{ rol | json }}
+                    <div *ngIf="rolCreadoActualizado">
+                        {{ rolCreadoActualizado | json }}
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" *ngIf="!rol" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" *ngIf="!rol" (click)="guardarNuevoRol()">Crear</button>
-                <button type="button" class="btn btn-primary" *ngIf="rol" (click)="cerrarModal()">Aceptar</button>
+                <button type="button" class="btn btn-secondary" *ngIf="!rolCreadoActualizado" data-dismiss="modal">
+                    Cancel
+                </button>
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    *ngIf="!rolCreadoActualizado"
+                    (click)="btnGuardarActualizar()"
+                >
+                    Crear
+                </button>
+                <button type="button" class="btn btn-primary" *ngIf="rolCreadoActualizado" (click)="cerrarModal()">
+                    Aceptar
+                </button>
             </div>
         </div>
     </div>
@@ -128,9 +147,15 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" *ngIf="rol" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-danger" *ngIf="rol" (click)="removerUsuarioRol()">Remover</button>
-                <button type="button" class="btn btn-primary" *ngIf="!rol" (click)="cerrarModal()">Aceptar</button>
+                <button type="button" class="btn btn-secondary" *ngIf="rolSeleccionado" data-dismiss="modal">
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-danger" *ngIf="rolSeleccionado" (click)="removerUsuarioRol()">
+                    Remover
+                </button>
+                <button type="button" class="btn btn-primary" *ngIf="!rolSeleccionado" (click)="cerrarModal()">
+                    Aceptar
+                </button>
             </div>
         </div>
     </div>

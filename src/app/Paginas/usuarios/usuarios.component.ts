@@ -96,7 +96,7 @@ export class UsuariosComponent implements OnInit {
         this.obtenerListaUsuariosRoles();
     }
 
-    pagination(paginado: ModeloPaginacion) {
+    pagination(paginado: ModeloPaginacion<ModeloUsuario>) {
         this.usuariosMostrar = paginado.itemsArray;
     }
 

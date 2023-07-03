@@ -21,6 +21,18 @@ export interface Ruta {
     ruta_componente: string;
 }
 
+export interface RutaCreacion {
+    id: string;
+    titulo: string;
+    orden: string;
+    ruta: string;
+    icono: string;
+    color_1: string;
+    color_2: string;
+    componente: string;
+    fk_categoria: string;
+}
+
 export interface RutaListaHTML {
     categoria_id: string;
     categoria_orden: number;
@@ -30,4 +42,12 @@ export interface RutaListaHTML {
     categoria_color_1: string;
     categoria_color_2: string;
     rutas: Ruta[];
+}
+
+export interface RespuestaModeloRutas {
+    rutas: Ruta[];
+}
+
+export interface RespuestaCreacionRuta {
+    ruta: Ruta;
 }

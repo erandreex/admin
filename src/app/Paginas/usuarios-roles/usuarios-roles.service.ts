@@ -3,7 +3,13 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { catchError, map, of, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { ModeloRespuesta } from 'src/app/Modelos/ModeloRespuesta';
-import { ModeloRol, RespuestaCreacionRol, RespuestaModeloRol } from './ModeloRoles';
+import {
+    ModeloRol,
+    RespuestaActualizarRol,
+    RespuestaCrearRol,
+    RespuestaModeloRol,
+    RespuestaRemoverRol,
+} from './ModeloRoles';
 
 @Injectable({
     providedIn: 'root',
@@ -27,27 +33,40 @@ export class UsuariosRolesService {
         );
     }
 
-    crear(body: ModeloRol): Observable<ModeloRespuesta<RespuestaCreacionRol>> {
+    crear(body: ModeloRol): Observable<ModeloRespuesta<RespuestaCrearRol>> {
         const url = `${this.apiURL}/${this.apiAdm}/crear`;
 
         const headers = new HttpHeaders({
             Authorization: `Bearer ${localStorage.getItem('token')}`,
         });
 
-        return this.http.post<ModeloRespuesta<RespuestaCreacionRol>>(url, body, { headers }).pipe(
+        return this.http.post<ModeloRespuesta<RespuestaCrearRol>>(url, body, { headers }).pipe(
             map((resp) => resp),
             catchError((err) => of(err))
         );
     }
 
-    remover(body: ModeloRol): Observable<ModeloRespuesta<null>> {
+    actualizar(body: ModeloRol): Observable<ModeloRespuesta<RespuestaActualizarRol>> {
+        const url = `${this.apiURL}/${this.apiAdm}/actualizar`;
+
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        });
+
+        return this.http.post<ModeloRespuesta<RespuestaActualizarRol>>(url, body, { headers }).pipe(
+            map((resp) => resp),
+            catchError((err) => of(err))
+        );
+    }
+
+    remover(body: ModeloRol): Observable<ModeloRespuesta<RespuestaRemoverRol>> {
         const url = `${this.apiURL}/${this.apiAdm}/remover`;
 
         const headers = new HttpHeaders({
             Authorization: `Bearer ${localStorage.getItem('token')}`,
         });
 
-        return this.http.post<ModeloRespuesta<null>>(url, body, { headers }).pipe(
+        return this.http.post<ModeloRespuesta<RespuestaRemoverRol>>(url, body, { headers }).pipe(
             map((resp) => resp),
             catchError((err) => of(err))
         );

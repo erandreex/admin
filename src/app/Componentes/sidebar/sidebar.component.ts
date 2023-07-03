@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Ruta, RutaListaHTML } from 'src/app/Modelos/ModeloRutas';
 import { SidebarService } from './sidebar.service';
 import { AuthService } from '../../Servicios/auth.service';
+import { Ruta, RutaListaHTML } from './ModeloRutas';
 
 @Component({
     selector: 'app-sidebar',

@@ -18,7 +18,7 @@ export class PaginationComponent {
     @Input() arrayInfo: any[] = [];
     @Input() estilo: number = 1;
 
-    @Output() changePage: EventEmitter<ModeloPaginacion> = new EventEmitter<ModeloPaginacion>();
+    @Output() changePage: EventEmitter<ModeloPaginacion<any>> = new EventEmitter<ModeloPaginacion<any>>();
 
     opcionesEstilo: number[] = [1, 2];
 
@@ -81,7 +81,7 @@ export class PaginationComponent {
         Promise.resolve().then((e) => this.changePage.emit(this.respuestaPaginacion()));
     }
 
-    respuestaPaginacion(): ModeloPaginacion {
+    respuestaPaginacion(): ModeloPaginacion<any> {
         return {
             itemsArray: this.arrayInfo.slice(
                 (this.paginaActual - 1) * this.itemsPerPage,

@@ -1,5 +1,5 @@
-export interface ModeloPaginacion {
-    itemsArray: any[];
+export interface ModeloPaginacion<T> {
+    itemsArray: T[];
     totalItemsArray: number;
     cantidadItemsPorPagina: number;
     indiceInicialPaginaActual: number;
