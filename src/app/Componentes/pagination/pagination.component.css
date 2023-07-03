@@ -1,0 +1,64 @@
+.pagination .page-item.active .page-link {
+    color: black;
+    background-color: azure;
+    border: 1px solid black;
+}
+
+.pagination .page-item .page-link:hover {
+    background-color: aqua;
+    color: black;
+}
+
+.pagination .page-item.excluir .page-link:hover {
+    background-color: transparent;
+    cursor: default;
+    color: inherit;
+}
+
+.indices {
+    margin: 0;
+}
+.row {
+    margin: 0;
+    padding: 5px;
+}
+
+.iconoFlotante {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+span {
+    z-index: 50;
+    user-select: none;
+}
+
+.dot-pagination {
+    position: relative;
+    width: 25px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.fas.fa-circle {
+    font-size: 25px;
+}
+
+.page-item.dot-pagination.active {
+    color: aqua;
+}
+
+.page-item.dot-pagination:hover .iconoFlotante {
+    color: violet;
+}
+
+a {
+    user-select: none;
+}
+
+.puntitos {
+    font-size: 10px;
+    color: yellow;
+}

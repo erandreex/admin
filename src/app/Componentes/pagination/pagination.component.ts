@@ -20,7 +20,7 @@ export class PaginationComponent {
 
     @Output() changePage: EventEmitter<ModeloPaginacion> = new EventEmitter<ModeloPaginacion>();
 
-    opcionesEstilo: number[] = [1, 2, 3];
+    opcionesEstilo: number[] = [1, 2];
 
     constructor() {}
 

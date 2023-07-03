@@ -5,6 +5,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../Servicios/auth.service';
 import { delay } from 'rxjs';
 import { ModeloRol } from '../usuarios-roles/ModeloRoles';
+import { ModeloPaginacion } from 'src/app/Componentes/pagination/ModeloPaginacion';
+declare var $: any;
 
 @Component({
     selector: 'app-usuarios',
@@ -14,7 +16,9 @@ import { ModeloRol } from '../usuarios-roles/ModeloRoles';
 export class UsuariosComponent implements OnInit {
     public usuarios: ModeloUsuario[] = [];
     public usuariosRoles: ModeloRol[] = [];
-    public usuariosCreado!: ModeloUsuario;
+    public usuariosCreado!: ModeloUsuario | null;
+
+    public usuariosMostrar: ModeloUsuario[] = [];
 
     public mensaje: string = '';
 
@@ -69,14 +73,31 @@ export class UsuariosComponent implements OnInit {
                 next: (resp) => {
                     if (resp.ok) {
                         this.usuariosCreado = resp.respuesta.usuario;
+                        this.mensaje = resp.mensaje;
                     } else {
                         console.log('Error', resp);
+                        this.mensaje = resp.mensaje;
                     }
                     this.banderaCargando = false;
                 },
                 error: (err) => console.log('Error: ', err),
                 complete() {},
             });
+    }
+
+    abrirModal() {
+        this.usuariosCreado = null;
+        this.mensaje = '';
+        $('#modalUsuario').modal('show');
+    }
+
+    cerrarModal(): void {
+        $('#modalUsuario').modal('hide');
+        this.obtenerListaUsuariosRoles();
+    }
+
+    pagination(paginado: ModeloPaginacion) {
+        this.usuariosMostrar = paginado.itemsArray;
     }
 
     campoNoesValido(campo: string) {

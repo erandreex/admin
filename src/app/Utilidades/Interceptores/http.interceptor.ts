@@ -19,7 +19,7 @@ export class HttpIntercept implements HttpInterceptor {
         return next.handle(request).pipe(
             catchError((error: HttpErrorResponse) => {
                 this.modalsService.modalInteraction(error);
-                return throwError(error);
+                return throwError(error.error);
             })
         );
     }
