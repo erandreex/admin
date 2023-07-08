@@ -8,10 +8,18 @@ export interface ModeloRutaCategoria {
     orden: string;
 }
 
-export interface RespuestaModeloRutaCategoria {
-    rutas: ModeloRutaCategoria[];
+export interface RespuestaListaRutaCategoria {
+    rutas_categorias: ModeloRutaCategoria[];
 }
 
-export interface RespuestaCreacionRutaCategoria {
-    ruta: ModeloRutaCategoria;
+export interface RespuestaCrearRutaCategoria {
+    ruta_categoria: ModeloRutaCategoria;
+}
+
+export interface RespuestaActualizarRutaCategoria {
+    ruta_categoria: ModeloRutaCategoria;
+}
+
+export interface RespuestaRemoverRutaCategoria {
+    ruta_categoria: ModeloRutaCategoria;
 }

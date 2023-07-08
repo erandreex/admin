@@ -1,28 +1,24 @@
 <div class="card">
     <div class="card-header">
         <h5 class="mb-0">Usuarios Roles</h5>
-    </div>
 
-    <div class="card-body">
         <div class="d-flex align-items-center">
             <form class="ms-auto position-relative">
                 <div class="position-absolute top-50 translate-middle-y search-icon px-3">
-                    <i class="bi bi-search"></i>
+                    <i class="ri-search-line"></i>
                 </div>
                 <input class="form-control ps-5" type="text" placeholder="search" />
             </form>
+
             <div class="col-6">
-                <button
-                    data-toggle="modal"
-                    data-target="#modalUsuarioRoles"
-                    type="button"
-                    class="btn btn-success px-5"
-                    (click)="banderaCrear = true; abrirModal()"
-                >
+                <button (click)="banderaCrear = true; abrirModal()" type="button" class="btn btn-success px-5">
                     Agregar
                 </button>
             </div>
         </div>
+    </div>
+
+    <div class="card-body">
         <div class="table-responsive mt-3">
             <table class="table align-middle">
                 <thead class="table-secondary">
@@ -34,7 +30,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let rol of roles">
+                    <tr *ngFor="let rol of rolesMostrar">
                         <td>{{ rol.id }}</td>
                         <td>{{ rol.nombre }}</td>
 
@@ -62,6 +58,16 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
+
+        <div class="card-footer">
+            <app-pagination
+                [arrayInfo]="roles"
+                [itemsPerPage]="12"
+                [paginaActual]="1"
+                [estilo]="1"
+                (changePage)="pagination($event)"
+            ></app-pagination>
         </div>
     </div>
 </div>

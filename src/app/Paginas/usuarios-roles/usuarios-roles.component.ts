@@ -6,6 +6,7 @@ import { UsuariosRolesService } from './usuarios-roles.service';
 import { AuthService } from '../../Servicios/auth.service';
 import { ModeloRol } from './ModeloRoles';
 import { ModeloError } from 'src/app/Modelos/ModeloError';
+import { ModeloPaginacion } from 'src/app/Componentes/pagination/ModeloPaginacion';
 declare var $: any;
 
 @Component({
@@ -15,6 +16,7 @@ declare var $: any;
 })
 export class UsuariosRolesComponent {
     public roles: ModeloRol[] = [];
+    public rolesMostrar: ModeloRol[] = [];
 
     public rolSeleccionado: ModeloRol | undefined;
     public rolCreadoActualizado: ModeloRol | undefined;
@@ -64,7 +66,6 @@ export class UsuariosRolesComponent {
         this.rolCreadoActualizado = undefined;
         this.rolSeleccionado = undefined;
         this.mensaje = '';
-        this.obtenerListaUsuariosRoles();
     }
 
     removerUsuarioRol() {
@@ -79,6 +80,7 @@ export class UsuariosRolesComponent {
                     if (resp.ok) {
                         this.mensaje = resp.mensaje;
                         this.rolSeleccionado = undefined;
+                        this.obtenerListaUsuariosRoles();
                     } else {
                         this.mensaje = resp.error.mensaje;
                         this.error = resp.error;
@@ -89,6 +91,10 @@ export class UsuariosRolesComponent {
                 error: (err) => console.log('Error: ', err),
                 complete() {},
             });
+    }
+
+    pagination(paginado: ModeloPaginacion<ModeloRol>) {
+        this.rolesMostrar = paginado.itemsArray;
     }
 
     btnGuardarActualizar() {
@@ -119,6 +125,7 @@ export class UsuariosRolesComponent {
                     if (resp.ok) {
                         this.rolCreadoActualizado = resp.respuesta.rol;
                         this.mensaje = resp.mensaje;
+                        this.obtenerListaUsuariosRoles();
                     } else {
                         console.log('Error', resp);
                     }
@@ -142,6 +149,7 @@ export class UsuariosRolesComponent {
                     if (resp.ok) {
                         this.rolCreadoActualizado = resp.respuesta.rol;
                         this.mensaje = resp.mensaje;
+                        this.obtenerListaUsuariosRoles();
                     } else {
                         console.log('Error', resp);
                         this.mensaje = resp.mensaje;

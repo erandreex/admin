@@ -74,6 +74,7 @@ export class UsuariosComponent implements OnInit {
                     if (resp.ok) {
                         this.usuariosCreado = resp.respuesta.usuario;
                         this.mensaje = resp.mensaje;
+                        this.obtenerListaUsuariosRoles();
                     } else {
                         console.log('Error', resp);
                         this.mensaje = resp.mensaje;

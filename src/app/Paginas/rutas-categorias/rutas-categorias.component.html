@@ -1,7 +1,10 @@
 <div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Rutas Categorias</h5>
+    </div>
+
     <div class="card-body">
         <div class="d-flex align-items-center">
-            <h5 class="mb-0">Rutas</h5>
             <form class="ms-auto position-relative">
                 <div class="position-absolute top-50 translate-middle-y search-icon px-3">
                     <i class="bi bi-search"></i>
@@ -11,8 +14,7 @@
 
             <div class="col-6">
                 <button
-                    data-toggle="modal"
-                    data-target="#modalRutasCategorias"
+                    (click)="banderaCrear = true; abrirModalFormulario()"
                     type="button"
                     class="btn btn-success px-5"
                 >
@@ -31,10 +33,12 @@
                         <th>Icono</th>
                         <th>Color Principal</th>
                         <th>Color Secundario</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let rutaCategoria of rutasCategorias">
+                    <tr *ngFor="let rutaCategoria of rutasCategoriasMostrar">
                         <td>{{ rutaCategoria.id }}</td>
                         <td>{{ rutaCategoria.orden }}</td>
                         <td>{{ rutaCategoria.titulo }}</td>
@@ -42,10 +46,46 @@
                         <td>{{ rutaCategoria.icono }}</td>
                         <td>{{ rutaCategoria.color_1 }}</td>
                         <td>{{ rutaCategoria.color_2 }}</td>
+                        <td>
+                            <button
+                                (click)="
+                                    banderaCrear = false;
+                                    rutaCategoriaSeleccionada = rutaCategoria;
+                                    abrirModalFormulario()
+                                "
+                                type="button"
+                                class="btn btn-secondary"
+                            >
+                                Editar
+                            </button>
+                        </td>
+
+                        <td>
+                            <button
+                                type="button"
+                                class="btn btn-danger"
+                                (click)="
+                                    rutaCategoriaSeleccionada = rutaCategoria;
+                                    abrirModalConfirmacionRemover();
+                                    mensaje = ''
+                                "
+                            >
+                                Eliminar
+                            </button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
+    </div>
+    <div class="card-footer">
+        <app-pagination
+            [arrayInfo]="rutasCategorias"
+            [itemsPerPage]="12"
+            [paginaActual]="1"
+            [estilo]="1"
+            (changePage)="pagination($event)"
+        ></app-pagination>
     </div>
 </div>
 
@@ -64,7 +104,7 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <form [formGroup]="formularioUsuario" class="row g-3" *ngIf="!banderaCargando && !mensaje">
+                <form [formGroup]="formularioRutaCategorias" class="row g-3" *ngIf="!banderaCargando && !mensaje">
                     <input hidden type="text" class="form-control" formControlName="id" />
 
                     <div class="col-12">
@@ -140,21 +180,77 @@
 
                 <div *ngIf="!banderaCargando && mensaje">
                     <p>{{ mensaje }}</p>
-                    <div *ngIf="rutaCategoria">
-                        {{ rutaCategoria | json }}
+                    <div *ngIf="rutaCategoriaCreadaActualizada">
+                        {{ rutaCategoriaCreadaActualizada | json }}
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" *ngIf="!rutaCategoria" data-dismiss="modal">
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    *ngIf="!rutaCategoriaCreadaActualizada"
+                    data-dismiss="modal"
+                >
                     Cancel
                 </button>
-                <button type="button" class="btn btn-primary" *ngIf="!rutaCategoria" (click)="guardarRutaCategoria()">
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    *ngIf="!rutaCategoriaCreadaActualizada"
+                    (click)="btnGuardarActualizar()"
+                >
                     Save
                 </button>
-                <button type="button" class="btn btn-primary" *ngIf="rutaCategoria" (click)="cerrarModal()">
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    *ngIf="rutaCategoriaCreadaActualizada"
+                    (click)="cerrarModal()"
+                >
                     Aceptar
                 </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal HTML -->
+<div
+    id="modalRemoverConfirmacionRutasCategorias"
+    class="modal fade"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Formulario Usuarios Roles</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3" *ngIf="!banderaCargando && !mensaje">
+                    <div class="col-12">
+                        <p>¿Esta seguro que desea remover la ruta categoria?</p>
+                    </div>
+                </div>
+
+                <div *ngIf="banderaCargando">
+                    <div class="spinner"></div>
+                </div>
+
+                <div *ngIf="!banderaCargando && mensaje">
+                    <p>{{ mensaje }}</p>
+                    <p *ngIf="error">{{ error | json }}</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" *ngIf="!mensaje" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" *ngIf="!mensaje" (click)="removerRutaCategoria()">
+                    Remover
+                </button>
+                <button type="button" class="btn btn-primary" *ngIf="mensaje" (click)="cerrarModal()">Aceptar</button>
             </div>
         </div>
     </div>

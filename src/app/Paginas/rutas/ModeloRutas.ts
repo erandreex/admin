@@ -1,8 +1,22 @@
-export interface Rutas {
-    rutas: Ruta[];
+export interface Ruta {
+    categoria_id: string;
+    categoria_titulo: string;
+    id: string;
+    orden: number;
+    titulo: string;
+    ruta: string;
+    icono: string;
+    color_1: string;
+    color_2: string;
+    componente: string;
 }
 
-export interface Ruta {
+export interface RutasCategorias {
+    categoria_id: string;
+    categoria_titulo: string;
+}
+
+export interface RutaDetalles {
     categoria_id: string;
     categoria_orden: number;
     categoria_titulo: string;
@@ -21,33 +35,19 @@ export interface Ruta {
     ruta_componente: string;
 }
 
-export interface RutaCreacion {
-    id: string;
-    titulo: string;
-    orden: string;
-    ruta: string;
-    icono: string;
-    color_1: string;
-    color_2: string;
-    componente: string;
-    fk_categoria: string;
-}
-
-export interface RutaListaHTML {
-    categoria_id: string;
-    categoria_orden: number;
-    categoria_titulo: string;
-    categoria_ruta: string;
-    categoria_icono: string;
-    categoria_color_1: string;
-    categoria_color_2: string;
+export interface RespuestaListaRutas {
     rutas: Ruta[];
+    categorias: RutasCategorias[];
 }
 
-export interface RespuestaModeloRutas {
-    rutas: Ruta[];
+export interface RespuestaCrearRutas {
+    ruta: RutaDetalles;
 }
 
-export interface RespuestaCreacionRuta {
-    ruta: Ruta;
+export interface RespuestaActualizarRutas {
+    ruta: RutaDetalles;
+}
+
+export interface RespuestaRemoverRutas {
+    ruta: RutaDetalles;
 }

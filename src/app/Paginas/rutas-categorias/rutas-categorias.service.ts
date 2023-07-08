@@ -5,40 +5,67 @@ import { environment } from 'src/environments/environment.development';
 import { ModeloRespuesta } from 'src/app/Modelos/ModeloRespuesta';
 import {
     ModeloRutaCategoria,
-    RespuestaCreacionRutaCategoria,
-    RespuestaModeloRutaCategoria,
+    RespuestaActualizarRutaCategoria,
+    RespuestaCrearRutaCategoria,
+    RespuestaListaRutaCategoria,
+    RespuestaRemoverRutaCategoria,
 } from './ModeloRutaCategoria';
 
 @Injectable({
     providedIn: 'root',
 })
 export class RutasCategoriasService {
-    private baseUrl: string = environment.baseUrl + '/rutas/categoria';
-    private lstoken: string = 'token';
+    private baseUrl: string = environment.baseUrl;
 
     constructor(private http: HttpClient) {}
 
-    listar(): Observable<ModeloRespuesta<RespuestaModeloRutaCategoria>> {
-        const url = `${this.baseUrl}/listar`;
+    listar(): Observable<ModeloRespuesta<RespuestaListaRutaCategoria>> {
+        const url = `${this.baseUrl}/rutas/categoria/listar`;
 
         const headers = new HttpHeaders({
             Authorization: `Bearer ${localStorage.getItem('token')}`,
         });
 
-        return this.http.get<ModeloRespuesta<RespuestaModeloRutaCategoria>>(url, { headers }).pipe(
+        return this.http.get<ModeloRespuesta<RespuestaListaRutaCategoria>>(url, { headers }).pipe(
             map((resp) => resp),
             catchError((err) => of(err))
         );
     }
 
-    crear(body: ModeloRutaCategoria): Observable<ModeloRespuesta<RespuestaCreacionRutaCategoria>> {
-        const url = `${this.baseUrl}/crear`;
+    crear(body: ModeloRutaCategoria): Observable<ModeloRespuesta<RespuestaCrearRutaCategoria>> {
+        const url = `${this.baseUrl}/rutas/categoria/crear`;
 
         const headers = new HttpHeaders({
             Authorization: `Bearer ${localStorage.getItem('token')}`,
         });
 
-        return this.http.post<ModeloRespuesta<RespuestaCreacionRutaCategoria>>(url, body, { headers }).pipe(
+        return this.http.post<ModeloRespuesta<RespuestaCrearRutaCategoria>>(url, body, { headers }).pipe(
+            map((resp) => resp),
+            catchError((err) => of(err))
+        );
+    }
+
+    actualizar(body: ModeloRutaCategoria): Observable<ModeloRespuesta<RespuestaActualizarRutaCategoria>> {
+        const url = `${this.baseUrl}/rutas/categoria/actualizar`;
+
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        });
+
+        return this.http.post<ModeloRespuesta<RespuestaActualizarRutaCategoria>>(url, body, { headers }).pipe(
+            map((resp) => resp),
+            catchError((err) => of(err))
+        );
+    }
+
+    remover(body: ModeloRutaCategoria): Observable<ModeloRespuesta<RespuestaRemoverRutaCategoria>> {
+        const url = `${this.baseUrl}/rutas/categoria/remover`;
+
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        });
+
+        return this.http.post<ModeloRespuesta<RespuestaRemoverRutaCategoria>>(url, body, { headers }).pipe(
             map((resp) => resp),
             catchError((err) => of(err))
         );

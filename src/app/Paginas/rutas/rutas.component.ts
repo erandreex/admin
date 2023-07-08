@@ -3,7 +3,7 @@ import { RutasService } from './rutas.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/Servicios/auth.service';
 import { ModeloPaginacion } from 'src/app/Componentes/pagination/ModeloPaginacion';
-import { Ruta } from './ModeloRutas';
+import { Ruta, RutasCategorias, RutaDetalles } from './ModeloRutas';
 import { delay } from 'rxjs';
 import { ModeloError } from 'src/app/Modelos/ModeloError';
 declare var $: any;
@@ -18,9 +18,15 @@ export class RutasComponent implements OnInit {
     public banderaCargando: boolean = false;
     public rutas: Ruta[] = [];
     public rutasMostrar: Ruta[] = [];
+
+    public rutasCategorias: RutasCategorias[] = [];
+
     public rutaSeleccionada!: Ruta | null;
-    public rutaCreada!: Ruta | null;
+    public rutaCreadaActualizada!: RutaDetalles | null;
+
     public error!: ModeloError | null;
+
+    public banderaCrear: boolean = true;
 
     public formularioRutas: FormGroup = this.fb.group({
         id: ['id'],
@@ -31,7 +37,7 @@ export class RutasComponent implements OnInit {
         color_1: ['color_1', Validators.required],
         color_2: ['color_2', Validators.required],
         componente: ['componente', Validators.required],
-        fk_categoria: ['fk_categoria', Validators.required],
+        categoria_id: ['fk_categoria', Validators.required],
     });
 
     constructor(private authService: AuthService, private rutasService: RutasService, private fb: FormBuilder) {}
@@ -47,8 +53,9 @@ export class RutasComponent implements OnInit {
             next: (resp) => {
                 if (resp.ok) {
                     this.rutas = resp.respuesta.rutas;
+                    this.rutasCategorias = resp.respuesta.categorias;
                 } else {
-                    console.log('Error', resp);
+                    console.log('Error: ', resp);
                 }
             },
             error: (err) => console.log('Error: ', err),
@@ -75,12 +82,58 @@ export class RutasComponent implements OnInit {
             .subscribe({
                 next: (resp) => {
                     if (resp.ok) {
-                        this.rutaCreada = resp.respuesta.ruta;
+                        this.rutaCreadaActualizada = resp.respuesta.ruta;
                         this.mensaje = resp.mensaje;
                         this.obtenerListaRutas();
                     } else {
                         this.mensaje = resp.mensaje;
-                        console.log('Error', resp);
+                        this.error = resp.error;
+                        console.log('Error: ', resp);
+                    }
+                    this.banderaCargando = false;
+                },
+                error: (err) => console.log('Error: ', err),
+                complete() {},
+            });
+    }
+
+    btnGuardarActualizar() {
+        if (!this.authService.auth) return;
+
+        if (this.formularioRutas.invalid) {
+            this.formularioRutas.markAllAsTouched();
+            return;
+        }
+
+        if (this.banderaCrear) {
+            this.guardarNuevoUsuario();
+        } else {
+            this.actualizarUsuario();
+        }
+    }
+
+    actualizarUsuario() {
+        if (!this.authService.auth) return;
+
+        if (this.formularioRutas.invalid) {
+            this.formularioRutas.markAllAsTouched();
+            return;
+        }
+
+        this.banderaCargando = true;
+        this.rutasService
+            .actualizar(this.formularioRutas.value)
+            .pipe(delay(1000))
+            .subscribe({
+                next: (resp) => {
+                    if (resp.ok) {
+                        this.rutaCreadaActualizada = resp.respuesta.ruta;
+                        this.mensaje = resp.mensaje;
+                        this.obtenerListaRutas();
+                    } else {
+                        this.mensaje = resp.mensaje;
+                        this.error = resp.error;
+                        console.log('Error: ', resp);
                     }
                     this.banderaCargando = false;
                 },
@@ -92,7 +145,7 @@ export class RutasComponent implements OnInit {
     removerRuta() {
         if (!this.authService.auth) return;
 
-        let id: string = this.rutaSeleccionada!.ruta_id;
+        let id: string = this.rutaSeleccionada!.id;
 
         this.banderaCargando = true;
         this.rutasService
@@ -103,6 +156,7 @@ export class RutasComponent implements OnInit {
                     if (resp.ok) {
                         this.mensaje = resp.mensaje;
                         this.rutaSeleccionada = null;
+                        this.obtenerListaRutas();
                     } else {
                         this.mensaje = resp.mensaje;
                         this.error = resp.error;
@@ -119,14 +173,30 @@ export class RutasComponent implements OnInit {
         this.rutasMostrar = paginado.itemsArray;
     }
 
-    abrirModal() {
-        this.rutaCreada = null;
+    abrirModalConfirmacionRemover() {
         this.mensaje = '';
-        $('#modalRuta').modal('show');
+        $('#modalRemoverConfirmacionRutas').modal('show');
+    }
+
+    abrirModalFormulario() {
+        this.rutaCreadaActualizada = null;
+
+        if (this.banderaCrear) {
+            this.rutaSeleccionada = null;
+            this.formularioRutas.reset();
+        } else {
+            this.formularioRutas.patchValue(this.rutaSeleccionada!);
+        }
+        this.mensaje = '';
+
+        $('#modalFormularuioRuta').modal('show');
     }
 
     cerrarModal(): void {
-        $('#modalRuta').modal('hide');
-        this.obtenerListaRutas();
+        $('#modalFormularuioRuta').modal('hide');
+        $('#modalRemoverConfirmacionRutas').modal('hide');
+        this.mensaje = '';
+        this.rutaCreadaActualizada = null;
+        this.rutaSeleccionada = null;
     }
 }

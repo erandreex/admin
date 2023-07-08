@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../Servicios/auth.service';
 import { ModeloRutaCategoria } from './ModeloRutaCategoria';
 import { delay } from 'rxjs';
+import { ModeloPaginacion } from 'src/app/Componentes/pagination/ModeloPaginacion';
+import { ModeloError } from 'src/app/Modelos/ModeloError';
 declare var $: any;
 
 @Component({
@@ -13,13 +15,17 @@ declare var $: any;
 })
 export class RutasCategoriasComponent {
     public rutasCategorias: ModeloRutaCategoria[] = [];
-    public rutaCategoria: ModeloRutaCategoria | undefined;
+    public rutasCategoriasMostrar: ModeloRutaCategoria[] = [];
+    public rutaCategoriaSeleccionada: ModeloRutaCategoria | undefined;
+    public rutaCategoriaCreadaActualizada: ModeloRutaCategoria | undefined;
 
     public mensaje: string = '';
+    public error!: ModeloError;
 
     public banderaCargando: boolean = false;
+    public banderaCrear: boolean = true;
 
-    public formularioUsuario: FormGroup = this.fb.group({
+    public formularioRutaCategorias: FormGroup = this.fb.group({
         id: [''],
         titulo: ['titulo', Validators.required],
         ruta: ['titulo', Validators.required],
@@ -40,10 +46,12 @@ export class RutasCategoriasComponent {
     }
 
     obtenerRutasCategorias() {
+        if (!this.authService.auth) return;
+
         this.rutasCategoriasService.listar().subscribe({
             next: (resp) => {
                 if (resp.ok) {
-                    this.rutasCategorias = resp.respuesta.rutas;
+                    this.rutasCategorias = resp.respuesta.rutas_categorias;
                 } else {
                     console.log('Error', resp);
                 }
@@ -53,31 +61,21 @@ export class RutasCategoriasComponent {
         });
     }
 
-    cerrarModal(): void {
-        $('#modalRutasCategorias').modal('hide');
-        this.rutaCategoria = undefined;
-        this.mensaje = '';
-        this.obtenerRutasCategorias();
-    }
-
     guardarRutaCategoria() {
         if (!this.authService.auth) return;
 
-        if (this.formularioUsuario.invalid) {
-            this.formularioUsuario.markAllAsTouched();
-            return;
-        }
-
         this.banderaCargando = true;
         this.rutasCategoriasService
-            .crear(this.formularioUsuario.value)
+            .crear(this.formularioRutaCategorias.value)
             .pipe(delay(1000))
             .subscribe({
                 next: (resp) => {
                     if (resp.ok) {
-                        this.rutaCategoria = resp.respuesta.ruta;
+                        this.rutaCategoriaCreadaActualizada = resp.respuesta.ruta_categoria;
                         this.mensaje = resp.mensaje;
+                        this.obtenerRutasCategorias();
                     } else {
+                        this.error = resp.error;
                         console.log('Error', resp);
                     }
                     this.banderaCargando = false;
@@ -88,6 +86,106 @@ export class RutasCategoriasComponent {
     }
 
     campoNoesValido(campo: string) {
-        return this.formularioUsuario.controls[campo].errors && this.formularioUsuario.controls[campo].touched;
+        return (
+            this.formularioRutaCategorias.controls[campo].errors &&
+            this.formularioRutaCategorias.controls[campo].touched
+        );
+    }
+
+    btnGuardarActualizar() {
+        if (!this.authService.auth) return;
+
+        if (this.formularioRutaCategorias.invalid) {
+            this.formularioRutaCategorias.markAllAsTouched();
+            return;
+        }
+
+        if (this.banderaCrear) {
+            this.guardarRutaCategoria();
+        } else {
+            this.actualizarRutaCategoria();
+        }
+    }
+
+    actualizarRutaCategoria() {
+        if (!this.authService.auth) return;
+
+        this.banderaCargando = true;
+        this.rutasCategoriasService
+            .actualizar(this.formularioRutaCategorias.value)
+            .pipe(delay(1000))
+            .subscribe({
+                next: (resp) => {
+                    if (resp.ok) {
+                        this.rutaCategoriaCreadaActualizada = resp.respuesta.ruta_categoria;
+                        this.mensaje = resp.mensaje;
+                        this.obtenerRutasCategorias();
+                    } else {
+                        this.mensaje = resp.mensaje;
+                        this.error = resp.error;
+                        console.log('Error', resp);
+                    }
+                    this.banderaCargando = false;
+                },
+                error: (err) => console.log('Error: ', err),
+                complete() {},
+            });
+    }
+
+    removerRutaCategoria() {
+        if (!this.authService.auth) return;
+
+        this.banderaCargando = true;
+        this.rutasCategoriasService
+            .remover(this.rutaCategoriaSeleccionada!)
+            .pipe(delay(1000))
+            .subscribe({
+                next: (resp) => {
+                    if (resp.ok) {
+                        this.rutaCategoriaCreadaActualizada = resp.respuesta.ruta_categoria;
+                        this.mensaje = resp.mensaje;
+                        this.obtenerRutasCategorias();
+                    } else {
+                        this.mensaje = resp.mensaje;
+                        this.error = resp.error;
+                        console.log('Error', resp);
+                    }
+                    this.banderaCargando = false;
+                },
+                error: (err) => console.log('Error: ', err),
+                complete() {},
+            });
+    }
+
+    pagination(paginado: ModeloPaginacion<ModeloRutaCategoria>) {
+        this.rutasCategoriasMostrar = paginado.itemsArray;
+    }
+
+    abrirModalFormulario() {
+        this.rutaCategoriaCreadaActualizada = undefined;
+
+        if (this.banderaCrear) {
+            this.rutaCategoriaSeleccionada = undefined;
+            this.formularioRutaCategorias.reset();
+        } else {
+            this.formularioRutaCategorias.patchValue(this.rutaCategoriaSeleccionada!);
+        }
+        this.mensaje = '';
+
+        $('#modalRutasCategorias').modal('show');
+    }
+
+    abrirModalConfirmacionRemover() {
+        $('#modalRemoverConfirmacionRutasCategorias').modal('show');
+        this.mensaje = '';
+    }
+
+    cerrarModal(): void {
+        $('#modalRutasCategorias').modal('hide');
+        $('#modalRemoverConfirmacionRutasCategorias').modal('hide');
+
+        this.rutaCategoriaSeleccionada = undefined;
+        this.mensaje = '';
+        this.obtenerRutasCategorias();
     }
 }
