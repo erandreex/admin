@@ -1,37 +1,260 @@
 <div class="card">
-    <div class="card-body">
+    <div class="card-header">
+        <h5 class="mb-0">Rutas Acciones</h5>
+
         <div class="d-flex align-items-center">
-            <h5 class="mb-0">Usuarios</h5>
             <form class="ms-auto position-relative">
                 <div class="position-absolute top-50 translate-middle-y search-icon px-3">
-                    <i class="bi bi-search"></i>
+                    <i class="ri-search-line"></i>
                 </div>
                 <input class="form-control ps-5" type="text" placeholder="search" />
             </form>
+
+            <div class="col-6">
+                <button
+                    (click)="banderaCrear = true; abrirModalFormulario()"
+                    type="button"
+                    class="btn btn-success px-5"
+                >
+                    Agregar
+                </button>
+            </div>
         </div>
+    </div>
+
+    <div class="card-body">
         <div class="table-responsive mt-3">
             <table class="table align-middle">
                 <thead class="table-secondary">
                     <tr>
                         <th>Id</th>
                         <th>Controlador</th>
+                        <th>Endpoint</th>
                         <th>Metodo</th>
                         <th>Estado</th>
                         <th>Descripcion</th>
                         <th>Ruta ID</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let rutaAccion of rutasAcciones">
+                    <tr *ngFor="let rutaAccion of rutasAccionesMostrar">
                         <td>{{ rutaAccion.id }}</td>
                         <td>{{ rutaAccion.controlador }}</td>
+                        <td>{{ rutaAccion.endpoint }}</td>
                         <td>{{ rutaAccion.metodo }}</td>
                         <td>{{ rutaAccion.estado }}</td>
                         <td>{{ rutaAccion.descripcion }}</td>
                         <td>{{ rutaAccion.fk_ruta }}</td>
+                        <td>
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                (click)="
+                                    banderaCrear = false; rutasAccionSeleccionada = rutaAccion; abrirModalFormulario()
+                                "
+                            >
+                                Editar
+                            </button>
+                        </td>
+
+                        <td>
+                            <button
+                                type="button"
+                                class="btn btn-danger"
+                                (click)="rutasAccionSeleccionada = rutaAccion; abrirModalConfirmacionRemover()"
+                            >
+                                Eliminar
+                            </button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
+        </div>
+    </div>
+
+    <div class="card-footer">
+        <app-pagination
+            [arrayInfo]="rutasAcciones"
+            [itemsPerPage]="12"
+            [paginaActual]="1"
+            [estilo]="1"
+            (changePage)="pagination($event)"
+        ></app-pagination>
+    </div>
+</div>
+
+<!-- Modal HTML -->
+<div
+    id="modalFormularuioRutaAccion"
+    class="modal fade"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Formulario Rutas</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="formularioRutasAcciones" class="row g-3" *ngIf="!banderaCargando && !mensaje">
+                    <input hidden type="text" class="form-control" formControlName="id" />
+
+                    <div class="col-12">
+                        <label for="formularioRutasAccionesControlador" class="form-label">Controlador</label>
+                        <input
+                            id="formularioRutasAccionesControlador"
+                            type="text"
+                            class="form-control"
+                            formControlName="controlador"
+                        />
+                        <span *ngIf="campoNoesValido('controlador')" class="form-text text-danger">Es requerido</span>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="formularioRutasAccionesEndpoint" class="form-label">Endpoint</label>
+                        <input
+                            id="formularioRutasAccionesEndpoint"
+                            type="text"
+                            class="form-control"
+                            formControlName="endpoint"
+                        />
+                        <span *ngIf="campoNoesValido('endpoint')" class="form-text text-danger">Es requerido</span>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="formularioRutasAccionesMetodo" class="form-label">Metodo</label>
+                        <input
+                            id="formularioRutasAccionesMetodo"
+                            type="text"
+                            class="form-control"
+                            formControlName="metodo"
+                        />
+                        <span *ngIf="campoNoesValido('metodo')" class="form-text text-danger">Es requerido</span>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="formularioRutasAccionesEstado" class="form-label">Estado</label>
+                        <input
+                            id="formularioRutasAccionesEstado"
+                            type="text"
+                            class="form-control"
+                            formControlName="estado"
+                        />
+                        <span *ngIf="campoNoesValido('estado')" class="form-text text-danger">Es requerido</span>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="formularioRutasAccionesDescripcion" class="form-label">Descripcion</label>
+                        <input
+                            id="formularioRutasAccionesDescripcion"
+                            type="text"
+                            class="form-control"
+                            formControlName="descripcion"
+                        />
+                        <span *ngIf="campoNoesValido('descripcion')" class="form-text text-danger">Es requerido</span>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="formularioRutasAccionesFkrutaV1" class="form-label">Categoria</label>
+
+                        <select
+                            id="formularioRutasAccionesFkrutaV1"
+                            class="form-select"
+                            (change)="onListenerChangeCategoria($event)"
+                        >
+                            <option selected value=""></option>
+                            <option *ngFor="let rutac of rutasCategoriasLista" [value]="rutac.categoria_id">
+                                {{ rutac.categoria_titulo }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-12" *ngIf="rutasCategoriaSeleccionada">
+                        <label for="formularioRutasAccionesFkrutaV2" class="form-label">Ruta</label>
+
+                        <select id="formularioRutasAccionesFkrutaV2" class="form-select" formControlName="fk_ruta">
+                            <option selected value=""></option>
+                            <option *ngFor="let rutac of rutasListaMostrar" [value]="rutac.id">
+                                {{ rutac.titulo }}
+                            </option>
+                        </select>
+                        <span *ngIf="campoNoesValido('fk_ruta')" class="form-text text-danger">Es requerido</span>
+                    </div>
+                </form>
+
+                <div *ngIf="banderaCargando">
+                    <div class="spinner"></div>
+                </div>
+
+                <div *ngIf="!banderaCargando && mensaje">
+                    <p>{{ mensaje }}</p>
+                    <div *ngIf="rutaAccionCreadaActualizada">
+                        {{ rutaAccionCreadaActualizada | json }}
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    *ngIf="!rutaAccionCreadaActualizada && !mensaje"
+                    data-dismiss="modal"
+                >
+                    Cancel
+                </button>
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    *ngIf="!rutaAccionCreadaActualizada && !mensaje"
+                    (click)="btnGuardarActualizar()"
+                >
+                    Save
+                </button>
+                <button type="button" class="btn btn-primary" *ngIf="mensaje" (click)="cerrarModal()">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal HTML -->
+<div
+    id="modalRemoverConfirmacionRutaAccion"
+    class="modal fade"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Formulario Usuarios Roles</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3" *ngIf="!banderaCargando && !mensaje">
+                    <div class="col-12">
+                        <p>¿Esta seguro que desea remover la ruta accion?</p>
+                    </div>
+                </div>
+
+                <div *ngIf="banderaCargando">
+                    <div class="spinner"></div>
+                </div>
+
+                <div *ngIf="!banderaCargando && mensaje">
+                    <p>{{ mensaje }}</p>
+                    <p *ngIf="error">{{ error | json }}</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" *ngIf="!mensaje" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" *ngIf="!mensaje" (click)="removerRuta()">Remover</button>
+                <button type="button" class="btn btn-primary" *ngIf="mensaje" (click)="cerrarModal()">Aceptar</button>
+            </div>
         </div>
     </div>
 </div>
