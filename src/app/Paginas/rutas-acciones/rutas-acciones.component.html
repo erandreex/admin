@@ -27,26 +27,26 @@
             <table class="table align-middle">
                 <thead class="table-secondary">
                     <tr>
-                        <th>Id</th>
+                        <th>Categoria</th>
+                        <th>Ruta</th>
                         <th>Controlador</th>
                         <th>Endpoint</th>
                         <th>Metodo</th>
                         <th>Estado</th>
                         <th>Descripcion</th>
-                        <th>Ruta ID</th>
                         <th>Editar</th>
                         <th>Eliminar</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let rutaAccion of rutasAccionesMostrar">
-                        <td>{{ rutaAccion.id }}</td>
+                        <td>{{ rutaAccion.categoria_titulo }}</td>
+                        <td>{{ rutaAccion.ruta_titulo }}</td>
                         <td>{{ rutaAccion.controlador }}</td>
                         <td>{{ rutaAccion.endpoint }}</td>
                         <td>{{ rutaAccion.metodo }}</td>
                         <td>{{ rutaAccion.estado }}</td>
                         <td>{{ rutaAccion.descripcion }}</td>
-                        <td>{{ rutaAccion.fk_ruta }}</td>
                         <td>
                             <button
                                 type="button"
@@ -127,12 +127,13 @@
 
                     <div class="col-12">
                         <label for="formularioRutasAccionesMetodo" class="form-label">Metodo</label>
-                        <input
-                            id="formularioRutasAccionesMetodo"
-                            type="text"
-                            class="form-control"
-                            formControlName="metodo"
-                        />
+
+                        <select id="formularioRutasAccionesMetodo" class="form-select" formControlName="metodo">
+                            <option selected value=""></option>
+                            <option *ngFor="let rutac of opcionesHttp" [value]="rutac.valor">
+                                {{ rutac.valor }}
+                            </option>
+                        </select>
                         <span *ngIf="campoNoesValido('metodo')" class="form-text text-danger">Es requerido</span>
                     </div>
 
@@ -165,6 +166,7 @@
                             id="formularioRutasAccionesFkrutaV1"
                             class="form-select"
                             (change)="onListenerChangeCategoria($event)"
+                            formControlName="categoria_id"
                         >
                             <option selected value=""></option>
                             <option *ngFor="let rutac of rutasCategoriasLista" [value]="rutac.categoria_id">
@@ -176,13 +178,13 @@
                     <div class="col-12" *ngIf="rutasCategoriaSeleccionada">
                         <label for="formularioRutasAccionesFkrutaV2" class="form-label">Ruta</label>
 
-                        <select id="formularioRutasAccionesFkrutaV2" class="form-select" formControlName="fk_ruta">
+                        <select id="formularioRutasAccionesFkrutaV2" class="form-select" formControlName="ruta_id">
                             <option selected value=""></option>
                             <option *ngFor="let rutac of rutasListaMostrar" [value]="rutac.id">
                                 {{ rutac.titulo }}
                             </option>
                         </select>
-                        <span *ngIf="campoNoesValido('fk_ruta')" class="form-text text-danger">Es requerido</span>
+                        <span *ngIf="campoNoesValido('ruta_id')" class="form-text text-danger">Es requerido</span>
                     </div>
                 </form>
 

@@ -1,8 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { RutasAccionesService } from './rutas-acciones.service';
-import { ModeloExternoRuta, ModeloExternoRutaCategorias, ModeloRutasAcciones } from './ModeloRutasAcciones';
 import { AuthService } from 'src/app/Servicios/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+    ModeloExternoRuta,
+    ModeloExternoRutaCategorias,
+    ModeloOpcionesHttp,
+    ModeloRutasAcciones,
+} from './ModeloRutasAcciones';
 import { ModeloError } from 'src/app/Modelos/ModeloError';
 import { delay } from 'rxjs';
 import { ModeloPaginacion } from 'src/app/Componentes/pagination/ModeloPaginacion';
@@ -20,6 +25,7 @@ export class RutasAccionesComponent implements OnInit {
     public rutasLista: ModeloExternoRuta[] = [];
     public rutasCategoriasLista: ModeloExternoRutaCategorias[] = [];
     public rutasListaMostrar: ModeloExternoRuta[] = [];
+    public opcionesHttp: ModeloOpcionesHttp[] = [];
 
     public rutaAccionCreadaActualizada: ModeloRutasAcciones | null = null;
 
@@ -40,7 +46,8 @@ export class RutasAccionesComponent implements OnInit {
         metodo: ['metodo', Validators.required],
         estado: ['estado', Validators.required],
         descripcion: ['descripcion', Validators.required],
-        fk_ruta: ['fk_ruta', Validators.required],
+        categoria_id: [''],
+        ruta_id: ['ruta_id', Validators.required],
     });
 
     constructor(
@@ -67,6 +74,7 @@ export class RutasAccionesComponent implements OnInit {
                     this.rutasAcciones = resp.respuesta['rutas-acciones'];
                     this.rutasLista = resp.respuesta.rutas;
                     this.rutasCategoriasLista = resp.respuesta['rutas-categorias'];
+                    this.opcionesHttp = resp.respuesta['metodos-http'];
                 } else {
                     console.log('Error: ', resp);
                 }
@@ -91,6 +99,8 @@ export class RutasAccionesComponent implements OnInit {
             this.formularioRutasAcciones.reset();
         } else {
             this.formularioRutasAcciones.patchValue(this.rutasAccionSeleccionada!);
+            this.rutasCategoriaSeleccionada = this.rutasAccionSeleccionada!.categoria_id;
+            this.rutasListaMostrar = this.rutasLista.filter((e) => e.categoria_id == this.rutasCategoriaSeleccionada);
         }
         this.mensaje = '';
 

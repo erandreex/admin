@@ -5,7 +5,10 @@ export interface ModeloRutasAcciones {
     metodo: string;
     estado: string;
     descripcion: string;
-    fk_ruta: string;
+    ruta_id: string;
+    ruta_titulo: string;
+    categoria_id: string;
+    categoria_titulo: string;
 }
 
 export interface ModeloExternoRutaCategorias {
@@ -19,10 +22,16 @@ export interface ModeloExternoRuta {
     categoria_id: string;
 }
 
+export interface ModeloOpcionesHttp {
+    nombre: string;
+    valor: string;
+}
+
 export interface RespuestaListaRutasAcciones {
     'rutas-acciones': ModeloRutasAcciones[];
     'rutas-categorias': ModeloExternoRutaCategorias[];
     rutas: ModeloExternoRuta[];
+    'metodos-http': ModeloOpcionesHttp[];
 }
 
 export interface RespuestaActualizarRutaAccion {
