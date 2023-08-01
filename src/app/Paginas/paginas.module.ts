@@ -13,6 +13,7 @@ import { UsuariosComponent } from './usuarios/usuarios.component';
 import { RutasAccionesComponent } from './rutas-acciones/rutas-acciones.component';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { PermisosRolesRutasComponent } from './permisos-roles-rutas/permisos-roles-rutas.component';
 
 @NgModule({
     declarations: [
@@ -25,6 +26,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
         RutasAccionesComponent,
         ForbiddenComponent,
         DashboardComponent,
+        PermisosRolesRutasComponent,
     ],
     imports: [CommonModule, PaginasRoutingModule, ComponentesModule, ReactiveFormsModule],
 })

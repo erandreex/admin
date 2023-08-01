@@ -1,0 +1,188 @@
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Rutas</h5>
+
+        <div class="d-flex align-items-center">
+            <form class="ms-auto position-relative">
+                <div class="position-absolute top-50 translate-middle-y search-icon px-3">
+                    <i class="ri-search-line"></i>
+                </div>
+                <input class="form-control ps-5" type="text" placeholder="search" />
+            </form>
+
+            <div class="col-6">
+                <button (click)="abrirModalFormulario()" type="button" class="btn btn-success px-5">Agregar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="table-responsive mt-3">
+            <table class="table align-middle">
+                <thead class="table-secondary">
+                    <tr>
+                        <th>Rol</th>
+                        <th>Categoria</th>
+                        <th>Ruta</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let permiso of permisosRolesRutasMostrar">
+                        <td>{{ permiso.rol_nombre }}</td>
+                        <td>{{ permiso.categoria_titulo }}</td>
+                        <td>{{ permiso.ruta_titulo }}</td>
+                        <td>
+                            <button
+                                type="button"
+                                class="btn btn-danger"
+                                (click)="permisoRolRutaSeleccionado = permiso; abrirModalConfirmacionRemover()"
+                            >
+                                Eliminar
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card-footer">
+            <app-pagination
+                [arrayInfo]="permisosRolesRutas"
+                [itemsPerPage]="12"
+                [paginaActual]="1"
+                [estilo]="1"
+                (changePage)="pagination($event)"
+            ></app-pagination>
+        </div>
+    </div>
+</div>
+
+<!-- Modal HTML -->
+<div
+    id="modalFormularuioRuta"
+    class="modal fade"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Formulario Rutas</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="formularioPermisoRolRuta" class="row g-3" *ngIf="!banderaCargando && !mensaje">
+                    <input hidden type="text" class="form-control" formControlName="id" />
+
+                    <div class="col-12">
+                        <label for="formularioPermisoRolRutaRol" class="form-label">Rol</label>
+
+                        <select id="formularioPermisoRolRutaRol" class="form-select" formControlName="rol_id">
+                            <option selected value=""></option>
+                            <option *ngFor="let rol of listaRol" [value]="rol.rol_id">
+                                {{ rol.rol_nombre }}
+                            </option>
+                        </select>
+                        <span *ngIf="campoNoesValido('rol_id')" class="form-text text-danger">Es requerido</span>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="formularioPermisoRolRutaCategoria" class="form-label">Categoria</label>
+                        <select
+                            id="formularioPermisoRolRutaCategoria"
+                            class="form-select"
+                            (change)="onListenerChangeCategoria($event)"
+                        >
+                            <option selected value=""></option>
+                            <option *ngFor="let categoria of listaRutasCategorias" [value]="categoria.categoria_id">
+                                {{ categoria.categoria_titulo }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-12" *ngIf="listaRutasCategoriaSeleccionada">
+                        <label for="formularioPermisoRolRuta" class="form-label">Ruta</label>
+                        <select id="formularioPermisoRolRutaCategoria" class="form-select" formControlName="ruta_id">
+                            <option selected value=""></option>
+                            <option *ngFor="let ruta of listaRutasMostrar" [value]="ruta.id">
+                                {{ ruta.titulo }}
+                            </option>
+                        </select>
+                        <span *ngIf="campoNoesValido('ruta_id')" class="form-text text-danger">Es requerido</span>
+                    </div>
+                </form>
+
+                <div *ngIf="banderaCargando">
+                    <div class="spinner"></div>
+                </div>
+
+                <div *ngIf="!banderaCargando && mensaje">
+                    <p>{{ mensaje }}</p>
+                    <div *ngIf="permisoRolRutaCreada">
+                        {{ permisoRolRutaCreada | json }}
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    *ngIf="!permisoRolRutaCreada && !mensaje"
+                    data-dismiss="modal"
+                >
+                    Cancel
+                </button>
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    *ngIf="!permisoRolRutaCreada && !mensaje"
+                    (click)="btnGuardar()"
+                >
+                    Save
+                </button>
+                <button type="button" class="btn btn-primary" *ngIf="mensaje" (click)="cerrarModal()">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal HTML -->
+<div
+    id="modalRemoverConfirmacionRutas"
+    class="modal fade"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Formulario Usuarios Roles</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3" *ngIf="!banderaCargando && !mensaje">
+                    <div class="col-12">
+                        <p>¿Esta seguro que desea remover el permiso?</p>
+                    </div>
+                </div>
+
+                <div *ngIf="banderaCargando">
+                    <div class="spinner"></div>
+                </div>
+
+                <div *ngIf="!banderaCargando && mensaje">
+                    <p>{{ mensaje }}</p>
+                    <p *ngIf="error">{{ error | json }}</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" *ngIf="!mensaje" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" *ngIf="!mensaje" (click)="removerRuta()">Remover</button>
+                <button type="button" class="btn btn-primary" *ngIf="mensaje" (click)="cerrarModal()">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
