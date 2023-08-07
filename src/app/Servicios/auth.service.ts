@@ -39,7 +39,7 @@ export class AuthService {
     }
 
     route(componente: string): Observable<ModeloRespuesta<any>> {
-        const url = `${this.baseUrl}/acceso/ruta/${componente}`;
+        const url = `${this.baseUrl}/index/acceso/ruta/${componente}`;
 
         const headers = new HttpHeaders({
             Authorization: `Bearer ${localStorage.getItem('token')}`,

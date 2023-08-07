@@ -10,12 +10,11 @@ import { RespuestaModeloRutas } from './ModeloRutas';
 })
 export class SidebarService {
     private apiUrl: string = environment.baseUrl;
-    private baseUrl: string = '/permisos/consultas';
 
     constructor(private http: HttpClient) {}
 
     obtenerRutas(): Observable<ModeloRespuesta<RespuestaModeloRutas>> {
-        const url = `${this.apiUrl}${this.baseUrl}/rutas`;
+        const url = `${this.apiUrl}/index/consultas/rutas`;
         const headers = new HttpHeaders({
             Authorization: `Bearer ${localStorage.getItem('token')}`,
         });
