@@ -144,12 +144,13 @@ export class RutasComponent implements OnInit {
 
     removerRuta() {
         if (!this.authService.auth) return;
+        if (!this.rutaSeleccionada) return;
 
         let id: string = this.rutaSeleccionada!.id;
 
         this.banderaCargando = true;
         this.rutasService
-            .remover({ id })
+            .remover(this.rutaSeleccionada)
             .pipe(delay(1000))
             .subscribe({
                 next: (resp) => {

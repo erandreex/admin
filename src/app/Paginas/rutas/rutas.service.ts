@@ -58,7 +58,7 @@ export class RutasService {
         );
     }
 
-    remover(body: { id: string }): Observable<ModeloRespuesta<RespuestaRemoverRutas>> {
+    remover(body: Ruta): Observable<ModeloRespuesta<RespuestaRemoverRutas>> {
         const url = `${this.baseUrl}/rutas/remover`;
 
         const headers = new HttpHeaders({
