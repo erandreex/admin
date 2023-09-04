@@ -12,8 +12,9 @@ import { UsuariosRolesComponent } from './usuarios-roles/usuarios-roles.componen
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { RutasAccionesComponent } from './rutas-acciones/rutas-acciones.component';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { PermisosRolesRutasComponent } from './permisos-roles-rutas/permisos-roles-rutas.component';
+import { InicioComponent } from './inicio/inicio.component';
+import { DashboardBaseComponent } from './dashboard-base/dashboard-base.component';
 
 @NgModule({
     declarations: [
@@ -25,8 +26,9 @@ import { PermisosRolesRutasComponent } from './permisos-roles-rutas/permisos-rol
         UsuariosComponent,
         RutasAccionesComponent,
         ForbiddenComponent,
-        DashboardComponent,
         PermisosRolesRutasComponent,
+        InicioComponent,
+        DashboardBaseComponent,
     ],
     imports: [CommonModule, PaginasRoutingModule, ComponentesModule, ReactiveFormsModule],
 })
