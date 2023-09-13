@@ -1,0 +1,9 @@
+.layout {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.nosemanda {
+    width: 800px;
+    height: 400px;
+}

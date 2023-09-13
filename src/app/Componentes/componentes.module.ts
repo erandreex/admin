@@ -10,8 +10,22 @@ import { PaginationComponent } from './pagination/pagination.component';
 import { GraficaComponent } from './grafica/grafica.component';
 
 @NgModule({
-    declarations: [HeaderComponent, SidebarComponent, BreadcrumbComponent, ModalsComponent, PaginationComponent, GraficaComponent],
+    declarations: [
+        HeaderComponent,
+        SidebarComponent,
+        BreadcrumbComponent,
+        ModalsComponent,
+        PaginationComponent,
+        GraficaComponent,
+    ],
     imports: [CommonModule, RouterModule, UtilidadesModule],
-    exports: [HeaderComponent, SidebarComponent, BreadcrumbComponent, ModalsComponent, PaginationComponent],
+    exports: [
+        HeaderComponent,
+        SidebarComponent,
+        BreadcrumbComponent,
+        ModalsComponent,
+        PaginationComponent,
+        GraficaComponent,
+    ],
 })
 export class ComponentesModule {}
