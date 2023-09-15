@@ -1,14 +1,25 @@
+import { ChartTypeRegistry } from 'chart.js';
+
 export interface ModeloGraficaConfig {
     id: string;
     nombre: string;
     titulo: string;
+    tipo_principal: keyof ChartTypeRegistry;
     cant_registros: number;
-    tipo_registros: string;
-    label_y: string;
+    intervalo_operacion: string;
+    intervalo_tiempo: 'millisecond' | 'second' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'quarter' | 'year';
+    intervalo_valor: string;
+    y_label: string;
+    y_color: string;
+    y_sugg_max: number;
+    y_sugg_min: number;
+    y_beginAtZero: string;
+    y_tick_limit: number;
+    x_color: string;
+    x_tick_limit: number;
     stacked: string;
     background: string;
-    max_tick_limit: number;
-    max_suggested: number;
+    observable: number;
 }
 
 export interface ModeloGraficaDatasetConfig {
@@ -20,8 +31,7 @@ export interface ModeloGraficaDatasetConfig {
     proc_operacion: string;
     rutina: string;
     dataset_label: string;
-    tipoPrincipal: string;
-    tipoSecundario: string;
+    tipo: string;
     fondo_color: string;
     borde_color: string;
     borde_tamano: string;
