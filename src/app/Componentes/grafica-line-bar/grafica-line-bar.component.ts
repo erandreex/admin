@@ -1,75 +1,87 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Observable, interval, of } from 'rxjs';
 
-import Chart from 'chart.js/auto';
+import Chart, { ChartTypeRegistry } from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
-import { format } from 'date-fns';
-
-// import 'moment/locale/es'; // Importa la localización que desees, en este caso, español
 import {
-    ModeloDataGraficaFinal,
     ModeloGraficaConfig,
     ModeloGraficaConsulta,
     ModeloGraficaDatasetConfig,
     ModeloGraficaDatasetData,
+    escala_opciones,
+    intervalo_tiempo_options,
 } from './ModeloGrafica';
-import { GraficaService } from './grafica.service';
+
+import { GraficaService } from './grafica-line-bar.service';
+import { ModeloConfiguracionComponente } from 'src/app/Paginas/dashboard-base/ModeloDashboard';
 
 declare var $: any;
 
 @Component({
-    selector: 'app-grafica',
-    templateUrl: './grafica.component.html',
-    styleUrls: ['./grafica.component.css'],
+    selector: 'app-grafica-line-bar',
+    templateUrl: './grafica-line-bar.component.html',
+    styleUrls: ['./grafica-line-bar.component.css'],
 })
-export class GraficaComponent implements OnInit, OnDestroy {
+export class GraficaLineBarComponent implements OnInit, OnDestroy, AfterViewInit {
+    //
     // VARIABLES GENERALES GRAFICA
-    @Input('nombre') public nombre: string = '';
-    myChartOriginal: any = null;
-    listaLabelsGrafica: string[] = [];
-    public chart: any;
-    miObservableConsDatos: any = null;
+    @Input('componente') public componente!: ModeloConfiguracionComponente;
+
+    public myChartOriginal: any = null;
+    public miObservableConsDatos: any = null;
+    public canvaHeight: number = 0;
+    public canvaWidth: number = 0;
+
     // VARIABLES GENERALES GRAFICA
 
     // VARIABLES GRAFICA CONFIG
-    configGraficaNombre: string = '';
-    configGraficaTitulo: string = '';
-    configGraficaCantRegistros: number = 15;
-    configGraficaIntervaloOperacion: string = '';
-    configGraficaIntervaloTiempo:
-        | 'millisecond'
-        | 'second'
-        | 'minute'
-        | 'hour'
-        | 'day'
-        | 'week'
-        | 'month'
-        | 'quarter'
-        | 'year' = 'minute';
-    configGraficaIntervaloValor: string = '';
-    configY_label: string = '';
-    configY_color: string = '';
-    configY_sugg_max: number = 11;
-    configY_sugg_min: number = 11;
-    configY_begintAtZero: boolean = false;
-    configY_tick_limit: number = 10;
-    configX_color: string = '';
-    configX_tick_limit: number = 15;
-    configGraficaStacked: boolean = false;
-    configGraficaBackground: string = '';
-    configGraficaObservable: number = 60000;
+    public configGraficaNombre: string = '';
+    public configGraficaTitulo: string = '';
+    public configGraficaTipoGrafica: keyof ChartTypeRegistry = 'line';
+    public configGraficaTipoEscala: escala_opciones = 'time';
+    public configGraficaCantRegistros: number = 15;
+    public configGraficaStacked: boolean = false;
+    public configGraficaObservable: number = 60000;
+    public configGraficaBackground_tipo: string = 'transparent';
+    public configGraficaBackground_color: string = '#000';
+    public configGraficaLayout_padding: number = 20;
+
+    public configGraficaIntervaloOperacion: string = '';
+    public configGraficaIntervaloTiempo: intervalo_tiempo_options = 'minute';
+    public configGraficaIntervaloValor: string = '';
+
+    public configY_label: string = 'Axis Y';
+    public configY_color: string = '#FFF';
+    public configY_sugg_max: number = 100;
+    public configY_sugg_min: number = 0;
+    public configY_begintAtZero: boolean = false;
+    public configY_tick_limit: number = 11;
+    public configY_fontSize: number = 12;
+
+    public configX_color: string = '#FFF';
+    public configX_source: 'labels' | 'auto' | 'data' = 'auto';
+    public configX_fontSize: number = 12;
+
+    public configGraficaLegend_boxSize: number = 12;
+    public configGraficaLegend_fontSize: number = 12;
+    public configGraficaLegend_color: string = '#FFF';
+
+    public configGraficaTitle_fontSize: number = 12;
+    public configGraficaTitle_color: string = '#FFF';
+
+    public configGraficaTooltip_fontSize: number = 12;
+    public configGraficaTooltip_color: string = '#FFF';
     // VARIABLES GRAFICA CONFIG
 
     // VARIABLES ARREGLOS
-
     public listaGraficaDatasetsConfig: ModeloGraficaDatasetConfig[] = [];
     public listaGraficaDatasetsData: ModeloGraficaDatasetData[] = [];
     public graficaConfig!: ModeloGraficaConfig;
     public listaGraficaLabels: string[] = [];
-
     // VARIABLES ARREGLOS
 
     constructor(private graficaService: GraficaService) {}
+    ngAfterViewInit(): void {}
 
     ngOnInit(): void {
         this.obtenerDatosGrafica();
@@ -88,45 +100,14 @@ export class GraficaComponent implements OnInit, OnDestroy {
     }
 
     obtenerDatosGrafica() {
-        let numero: string = '1';
-
-        switch (this.nombre) {
-            case 'grafica1':
-                numero = '1';
-                break;
-            case 'grafica2':
-                numero = '2';
-                break;
-            case 'grafica3':
-                numero = '3';
-                break;
-            case 'grafica4':
-                numero = '4';
-                break;
-            case 'grafica5':
-                numero = '5';
-                break;
-            case 'grafica6':
-                numero = '6';
-                break;
-            case 'grafica7':
-                numero = '7';
-                break;
-            case 'grafica8':
-                numero = '8';
-                break;
-            case 'grafica9':
-                numero = '9';
-                break;
-            default:
-                break;
-        }
-
         let body: ModeloGraficaConsulta = {
-            idGrafica: numero,
+            idGrafica: this.componente.configuracion.id,
             cantRegistros: 30,
             consultaFecha: 'N/A',
         };
+        console.log(this.componente);
+        this.canvaHeight = this.componente.propiedades.propiedad_alto;
+        this.canvaWidth = this.componente.propiedades.propiedad_ancho;
 
         this.graficaService.consultaGrafica(body).subscribe((resp) => {
             this.listaGraficaDatasetsData = resp.respuesta.datasetsData;
@@ -136,21 +117,40 @@ export class GraficaComponent implements OnInit, OnDestroy {
 
             this.configGraficaNombre = this.graficaConfig.nombre;
             this.configGraficaTitulo = this.graficaConfig.titulo;
+            this.configGraficaTipoGrafica = this.graficaConfig.tipo_grafica;
+            this.configGraficaTipoEscala = this.graficaConfig.tipo_escala;
             this.configGraficaCantRegistros = this.graficaConfig.cant_registros;
+            this.configGraficaStacked = this.graficaConfig.stacked == 'true';
+            this.configGraficaObservable = this.graficaConfig.observable;
+            this.configGraficaBackground_tipo = this.graficaConfig.background_tipo;
+            this.configGraficaBackground_color = this.graficaConfig.background_color;
+            this.configGraficaLayout_padding = this.graficaConfig.layout_padding;
+
             this.configGraficaIntervaloOperacion = this.graficaConfig.intervalo_operacion;
             this.configGraficaIntervaloTiempo = this.graficaConfig.intervalo_tiempo;
             this.configGraficaIntervaloValor = this.graficaConfig.intervalo_valor;
+
             this.configY_label = this.graficaConfig.y_label;
             this.configY_color = this.graficaConfig.y_color;
             this.configY_sugg_max = this.graficaConfig.y_sugg_max;
             this.configY_sugg_min = this.graficaConfig.y_sugg_min;
             this.configY_begintAtZero = this.graficaConfig.y_beginAtZero == 'true';
             this.configY_tick_limit = this.graficaConfig.y_tick_limit;
-            this.configGraficaStacked = this.graficaConfig.stacked == 'true';
-            this.configGraficaBackground = this.graficaConfig.background;
-            this.configGraficaObservable = this.graficaConfig.observable;
+            this.configY_fontSize = this.graficaConfig.y_fontSize;
+
             this.configX_color = this.graficaConfig.x_color;
-            this.configX_tick_limit = this.graficaConfig.x_tick_limit;
+            this.configX_source = this.graficaConfig.x_source;
+            this.configX_fontSize = this.graficaConfig.x_fontSize;
+
+            this.configGraficaLegend_boxSize = this.graficaConfig.legend_boxSize;
+            this.configGraficaLegend_fontSize = this.graficaConfig.legend_fontSize;
+            this.configGraficaLegend_color = this.graficaConfig.legend_color;
+
+            this.configGraficaTitle_fontSize = this.graficaConfig.title_fontSize;
+            this.configGraficaTitle_color = this.graficaConfig.title_color;
+
+            this.configGraficaTooltip_fontSize = this.graficaConfig.tooltip_fontSize;
+            this.configGraficaTooltip_color = this.graficaConfig.tooltip_color;
 
             if (this.myChartOriginal == null) {
                 this.DibujaGrafica().subscribe((resp) => {
@@ -186,10 +186,23 @@ export class GraficaComponent implements OnInit, OnDestroy {
                     stack: this.listaGraficaDatasetsConfig[i].stack,
                     borderColor: this.listaGraficaDatasetsConfig[i].borde_color,
                     backgroundColor: this.listaGraficaDatasetsConfig[i].fondo_color,
+                    drawActiveElementsOnTop: false,
                     tension: 0.3,
-                    hoverRadius: 1.2,
-                    // pointStyle: false,
+                    hitRadius: 0,
+                    barPercentage: 0.9,
+                    categoryPercentage: 0.8,
+                    point: {
+                        hoverRadius: 10,
+                        hitRadius: 0,
+                        hoverBorderWidth: 10,
+                        radius: 10,
+                    },
                 };
+
+                if (this.configGraficaStacked) {
+                    newDataset['stack'] = this.listaGraficaDatasetsConfig[i].stack;
+                }
+
                 temporal.push(newDataset);
             }
 
@@ -200,27 +213,108 @@ export class GraficaComponent implements OnInit, OnDestroy {
     }
 
     DibujaGrafica(): Observable<boolean> {
-        let canvas = <HTMLCanvasElement>document.getElementById(this.nombre);
-
+        let canvas = <HTMLCanvasElement>document.getElementById(this.componente.configuracion.componente_id);
         let ctx = canvas.getContext('2d');
-        let boxSize: number = 40;
-        let fontSize: number = 12;
 
-        if (screen.height < 700) {
-            boxSize = 5;
-            fontSize = 8;
-        }
+        // let canvasContainer = <HTMLElement>document.getElementById('containerGrafica');
+        // let valorFinal = '275';
 
-        let canvasContainer = <HTMLElement>document.getElementById('containerGrafica');
-        let tituloFinal: string = this.configGraficaTitulo;
-        let valorFinal = '100vh';
+        // if (canvasContainer) valorFinal = `${canvasContainer.clientHeight}px`;
 
-        if (canvasContainer) valorFinal = `${canvasContainer.clientHeight}px`;
-
-        canvas.style.width = 'auto';
-        canvas.style.height = valorFinal;
+        canvas.style.width = `${this.canvaWidth}px`;
+        canvas.style.height = `${this.canvaHeight}px`;
 
         let chartTemporal = new Chart(ctx!, {
+            type: this.configGraficaTipoGrafica,
+            data: {
+                labels: [],
+                datasets: [],
+            },
+            options: {
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                        labels: {
+                            color: this.configGraficaLegend_color,
+                            boxWidth: this.configGraficaLegend_boxSize,
+                            font: {
+                                size: this.configGraficaLegend_fontSize,
+                            },
+                        },
+                    },
+                    title: {
+                        display: true,
+                        text: this.configGraficaTitulo,
+                        color: this.configGraficaTitle_color,
+                        font: {
+                            size: this.configGraficaTitle_fontSize,
+                        },
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        yAlign: 'center',
+                        titleAlign: 'center',
+                        titleColor: this.configGraficaTooltip_color,
+                        titleFont: {
+                            size: this.configGraficaTooltip_fontSize,
+                        },
+                        bodyColor: this.configGraficaTooltip_color,
+                        bodyFont: {
+                            size: this.configGraficaTooltip_fontSize,
+                        },
+                        footerColor: this.configGraficaTooltip_color,
+                        footerFont: {
+                            size: this.configGraficaTooltip_fontSize,
+                        },
+                    },
+                },
+                layout: {
+                    padding: this.configGraficaLayout_padding,
+                },
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: this.configGraficaIntervaloTiempo,
+                            isoWeekday: 1,
+                            minUnit: 'minute',
+                        },
+                        ticks: {
+                            font: {
+                                size: this.configX_fontSize,
+                            },
+                            color: this.configX_color,
+                            source: this.configX_source,
+                        },
+                        stacked: this.configGraficaStacked,
+                    },
+                    y: {
+                        suggestedMax: this.configY_sugg_max,
+                        suggestedMin: this.configY_sugg_min,
+                        beginAtZero: this.configY_begintAtZero,
+                        stacked: this.configGraficaStacked,
+                        ticks: {
+                            font: {
+                                size: this.configY_fontSize,
+                            },
+                            color: this.configY_color,
+                            maxTicksLimit: this.configY_tick_limit,
+                        },
+                        title: {
+                            display: true,
+                            color: this.configY_color,
+                            text: this.configY_label,
+                        },
+                    },
+                },
+            },
             plugins: [
                 {
                     id: 'background',
@@ -234,93 +328,6 @@ export class GraficaComponent implements OnInit, OnDestroy {
                     },
                 },
             ],
-            type: this.graficaConfig.tipo_principal,
-            options: {
-                interaction: {
-                    mode: 'index',
-                    intersect: false,
-                },
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'bottom',
-                        labels: {
-                            color: '#FFF',
-                            boxWidth: boxSize,
-                            font: {
-                                size: fontSize,
-                            },
-                        },
-                    },
-                    title: {
-                        display: true,
-                        text: tituloFinal,
-                        color: '#FFF',
-                        font: {
-                            size: fontSize,
-                        },
-                    },
-                    tooltip: {
-                        mode: 'index',
-                        yAlign: 'center',
-                        bodyFont: {
-                            size: fontSize,
-                        },
-                        titleFont: {
-                            size: fontSize,
-                        },
-                        footerFont: {
-                            size: fontSize,
-                        },
-                    },
-                },
-                layout: {
-                    padding: 20,
-                },
-                scales: {
-                    x: {
-                        type: 'time',
-                        time: {
-                            unit: this.configGraficaIntervaloTiempo,
-                        },
-                        stacked: this.configGraficaStacked,
-                        ticks: {
-                            font: {
-                                size: 12,
-                            },
-                            color: 'white',
-                            source: 'data',
-                            // maxRotation: 10,
-                            // minRotation: 5,
-                        },
-                    },
-                    y: {
-                        suggestedMax: this.configY_sugg_max,
-                        suggestedMin: this.configY_sugg_min,
-                        beginAtZero: this.configY_begintAtZero,
-                        stacked: this.configGraficaStacked,
-
-                        ticks: {
-                            font: {
-                                size: 12,
-                            },
-                            color: this.configY_color,
-                            maxTicksLimit: this.configY_tick_limit,
-                        },
-                        title: {
-                            display: true,
-                            color: this.configY_color,
-                            text: this.configY_label,
-                        },
-                    },
-                },
-            },
-            data: {
-                labels: [],
-                datasets: [],
-            },
         });
 
         this.myChartOriginal = chartTemporal;

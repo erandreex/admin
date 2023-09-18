@@ -49,7 +49,7 @@ const routes: Routes = [
                 component: PermisosRolesRutasComponent,
             },
             {
-                path: 'dashboard/:id',
+                path: 'dashboard/:nombre',
                 component: DashboardBaseComponent,
             },
         ],

@@ -4,10 +4,11 @@ export interface ModeloGraficaConfig {
     id: string;
     nombre: string;
     titulo: string;
-    tipo_principal: keyof ChartTypeRegistry;
+    tipo_grafica: keyof ChartTypeRegistry;
+    tipo_escala: escala_opciones;
     cant_registros: number;
     intervalo_operacion: string;
-    intervalo_tiempo: 'millisecond' | 'second' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'quarter' | 'year';
+    intervalo_tiempo: intervalo_tiempo_options;
     intervalo_valor: string;
     y_label: string;
     y_color: string;
@@ -15,12 +16,43 @@ export interface ModeloGraficaConfig {
     y_sugg_min: number;
     y_beginAtZero: string;
     y_tick_limit: number;
+    y_fontSize: number;
     x_color: string;
-    x_tick_limit: number;
+    x_source: 'labels' | 'auto' | 'data';
+    x_fontSize: number;
     stacked: string;
-    background: string;
+    background_tipo: string;
+    background_color: string;
     observable: number;
+    legend_boxSize: number;
+    legend_fontSize: number;
+    legend_color: string;
+    title_fontSize: number;
+    title_color: string;
+    tooltip_fontSize: number;
+    tooltip_color: string;
+    layout_padding: number;
 }
+
+export type intervalo_tiempo_options =
+    | 'millisecond'
+    | 'second'
+    | 'minute'
+    | 'hour'
+    | 'day'
+    | 'week'
+    | 'month'
+    | 'quarter'
+    | 'year';
+
+export type escala_opciones =
+    | 'time'
+    | 'linear'
+    | 'logarithmic'
+    | 'category'
+    | 'timeseries'
+    | 'radialLinear'
+    | undefined;
 
 export interface ModeloGraficaDatasetConfig {
     grafica_id: string;
@@ -48,20 +80,6 @@ export interface ModeloGraficaDatasetData {
     dataFecha: string;
     dataCantidad: number;
     dataPosicion: number;
-}
-
-export interface ModeloDataGraficaFinal {
-    graficaData: number[];
-    graficaLabel: string;
-    graficaPointBackgroundColor: string;
-    graficaPointBorderColor: string;
-    graficaPointHoverColor: string;
-    graficaPointRadius: string;
-    graficaFill: boolean;
-    graficaType: string;
-    graficaStack: number;
-    graficaBorderColor: string;
-    graficaBorderWidth: string;
 }
 
 export interface ModeloRespuestaGraficaConsulta {
