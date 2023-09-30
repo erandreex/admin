@@ -52,12 +52,10 @@ const routes: Routes = [
                 path: 'dashboard/:nombre',
                 component: DashboardBaseComponent,
             },
-        ],
-    },
-    {
-        path: '',
-        component: IndexComponent,
-        children: [
+            {
+                path: 'forbidden',
+                component: ForbiddenComponent,
+            },
             {
                 path: '**',
                 component: NotFoundComponent,

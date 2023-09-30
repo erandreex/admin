@@ -105,7 +105,7 @@ export class GraficaLineBarComponent implements OnInit, OnDestroy, AfterViewInit
             cantRegistros: 30,
             consultaFecha: 'N/A',
         };
-        console.log(this.componente);
+
         this.canvaHeight = this.componente.propiedades.propiedad_alto;
         this.canvaWidth = this.componente.propiedades.propiedad_ancho;
 
