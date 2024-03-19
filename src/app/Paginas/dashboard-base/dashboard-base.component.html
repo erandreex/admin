@@ -1,0 +1,16 @@
+<div class="contenedor" #layout>
+    <div
+        class="prueba"
+        [style.grid-row]="componente.propiedades.span_alto"
+        [style.grid-column]="componente.propiedades.span_ancho"
+        [style.height]="componente.propiedades.propiedad_alto"
+        [style.width]="componente.propiedades.propiedad_ancho"
+        *ngFor="let componente of listaEnvioComponente"
+    >
+        <app-grafica-line-bar
+            *ngIf="componente.configuracion.tipo == 'grafica'"
+            [componente]="componente"
+        ></app-grafica-line-bar>
+        <div></div>
+    </div>
+</div>

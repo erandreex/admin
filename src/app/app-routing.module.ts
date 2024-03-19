@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './Paginas/login/login.component';
-import { NotFoundComponent } from './Paginas/not-found/not-found.component';
 import { routeGuard } from './Utilidades/Guards/route.guard';
+
+import { NotFoundComponent } from './Paginas/not-found/not-found.component';
+import { ForbiddenComponent } from './Paginas/forbidden/forbidden.component';
 
 const routes: Routes = [
     {

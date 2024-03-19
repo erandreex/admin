@@ -7,10 +7,25 @@ import { UtilidadesModule } from '../Utilidades/utilidades.module';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { ModalsComponent } from './modals/modals.component';
 import { PaginationComponent } from './pagination/pagination.component';
+import { GraficaLineBarComponent } from './grafica-line-bar/grafica-line-bar.component';
 
 @NgModule({
-    declarations: [HeaderComponent, SidebarComponent, BreadcrumbComponent, ModalsComponent, PaginationComponent],
+    declarations: [
+        HeaderComponent,
+        SidebarComponent,
+        BreadcrumbComponent,
+        ModalsComponent,
+        PaginationComponent,
+        GraficaLineBarComponent,
+    ],
     imports: [CommonModule, RouterModule, UtilidadesModule],
-    exports: [HeaderComponent, SidebarComponent, BreadcrumbComponent, ModalsComponent, PaginationComponent],
+    exports: [
+        HeaderComponent,
+        SidebarComponent,
+        BreadcrumbComponent,
+        ModalsComponent,
+        PaginationComponent,
+        GraficaLineBarComponent,
+    ],
 })
 export class ComponentesModule {}

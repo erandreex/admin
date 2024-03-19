@@ -1,16 +1,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { IndexComponent } from './index/index.component';
-import { RutasComponent } from './rutas/rutas.component';
-import { NotFoundComponent } from './not-found/not-found.component';
-import { RutasCategoriasComponent } from './rutas-categorias/rutas-categorias.component';
-import { UsuariosRolesComponent } from './usuarios-roles/usuarios-roles.component';
-import { UsuariosComponent } from './usuarios/usuarios.component';
-import { RutasAccionesComponent } from './rutas-acciones/rutas-acciones.component';
-import { routeGuard } from '../Utilidades/Guards/route.guard';
+
 import { ForbiddenComponent } from './forbidden/forbidden.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { IndexComponent } from './index/index.component';
+import { InicioComponent } from './inicio/inicio.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 import { PermisosRolesRutasComponent } from './permisos-roles-rutas/permisos-roles-rutas.component';
+import { routeGuard } from '../Utilidades/Guards/route.guard';
+import { RutasAccionesComponent } from './rutas-acciones/rutas-acciones.component';
+import { RutasCategoriasComponent } from './rutas-categorias/rutas-categorias.component';
+import { RutasComponent } from './rutas/rutas.component';
+import { UsuariosComponent } from './usuarios/usuarios.component';
+import { UsuariosRolesComponent } from './usuarios-roles/usuarios-roles.component';
+import { DashboardBaseComponent } from './dashboard-base/dashboard-base.component';
 
 const routes: Routes = [
     {
@@ -20,7 +22,7 @@ const routes: Routes = [
         children: [
             {
                 path: '',
-                component: DashboardComponent,
+                component: InicioComponent,
             },
             {
                 path: 'administracion/rutas',
@@ -47,15 +49,13 @@ const routes: Routes = [
                 component: PermisosRolesRutasComponent,
             },
             {
+                path: 'dashboard/:nombre',
+                component: DashboardBaseComponent,
+            },
+            {
                 path: 'forbidden',
                 component: ForbiddenComponent,
             },
-        ],
-    },
-    {
-        path: '',
-        component: IndexComponent,
-        children: [
             {
                 path: '**',
                 component: NotFoundComponent,

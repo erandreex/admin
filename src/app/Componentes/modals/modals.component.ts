@@ -31,31 +31,25 @@ export class ModalsComponent {
             const resp: ModeloRespuesta<any> = http.error;
             const errorResp: ModeloError = resp.error;
 
-            console.log('headers', headers);
-            console.log('status', status);
-            console.log('statusText', statusText);
-            console.log('url', url);
-            console.log('mensaje', mensaje);
-            console.log('ok', ok);
-            console.log('name', name);
-            console.log('resp', resp);
-            console.log('errorResp', errorResp);
-
             this.mensaje = resp.mensaje;
+
             this.abrirModal();
         });
     }
 
     btnAceptar() {
-        $('.modal').modal('hide');
-
         if (this.status == 'INTERNAL_SERVER_ERROR') {
+            $('.modal').modal('hide');
+
             this.router.navigateByUrl('/login');
         }
 
         if (this.status.includes('UNAUTHORIZED')) {
+            $('.modal').modal('hide');
+
             this.router.navigateByUrl('/login');
         }
+        $('#myModalOficial').modal('hide');
     }
 
     abrirModal() {
@@ -64,8 +58,6 @@ export class ModalsComponent {
 
         let status: string = resp.status;
         let code: number = resp.code;
-
-        console.log(status, code);
 
         this.status = status;
 

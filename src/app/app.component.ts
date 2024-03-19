@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { EstilosService } from './Servicios/estilos.service';
 import { EstilosGlobalModelo } from './Modelos/ModeloEstilos';
+import { AuthService } from './Servicios/auth.service';
+import { PreferenciasService } from './Servicios/preferencias.service';
+import { ModeloTema } from './Modelos/ModelosPreferencias';
 declare var $: any;
 
 @Component({
@@ -18,11 +21,39 @@ export class AppComponent {
 
     private subscriptionStyles!: Subscription;
 
-    constructor(private estilosService: EstilosService) {
-        this.addStyles(this.estilosService.styleLogic);
+    @ViewChild('estilos') estilos!: ElementRef<HTMLDivElement>;
 
-        this.subscriptionStyles = this.estilosService.changeStyles$.subscribe((estilos) => {
-            this.addStyles(estilos);
+    constructor(
+        private estilosService: EstilosService,
+        private authService: AuthService,
+        private preferenciasService: PreferenciasService
+    ) {
+        this.authService.validar().subscribe((resp) => {
+            if (resp.ok) {
+                this.authService.auth = true;
+
+                this.preferenciasService.preferencias().subscribe((resp) => {
+                    this.agregarEstilo(resp.respuesta.tema);
+                });
+            } else {
+                this.authService.auth = false;
+            }
+        });
+
+        this.preferenciasService.cambioPreferenciaObs$.subscribe((resp) => {
+            this.agregarEstilo(resp);
+        });
+
+        // this.addStyles(this.estilosService.styleLogic);
+
+        // this.subscriptionStyles = this.estilosService.changeStyles$.subscribe((estilos) => {
+        //     this.addStyles(estilos);
+        // });
+    }
+
+    agregarEstilo(preferencias: ModeloTema) {
+        Object.entries(preferencias).forEach(([key, value]) => {
+            this.estilos.nativeElement.style.setProperty(`--${key}`, `${value}`);
         });
     }
 

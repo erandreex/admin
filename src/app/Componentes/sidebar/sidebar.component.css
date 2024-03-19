@@ -4,16 +4,16 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 260px;
-    max-width: 260px;
+    width: 200px;
+    max-width: 200px;
     height: 100%;
-    background-color: var(--main-background);
+    background-color: var(--siderbar_backgroud_1);
     background-clip: padding-box;
-    border-right: 1px solid var(--theme-color-border);
+    border-right: 1px solid var(--sidebar_border_color);
     transition: all 0.2s;
     z-index: 16;
     display: grid;
-    grid-template-rows: 60px 1fr;
+    grid-template-rows: 50px 1fr;
 }
 
 .sidebar-wrapper > * {
@@ -24,10 +24,10 @@
     height: 100%;
     display: flex;
     align-items: center;
-    padding: 0 15px;
-    background: var(--main-background);
-    border-right: 1px solid var(--theme-color-border);
-    border-bottom: 1px solid var(--theme-color-border);
+    padding: 0 10px;
+    background: var(--siderbar_backgroud_2);
+    border-right: 1px solid var(--sidebar_border_color);
+    border-bottom: 1px solid var(--sidebar_border_color);
     background-clip: padding-box;
 }
 
@@ -36,16 +36,16 @@
 }
 
 .sidebar-header .logo-text {
-    font-size: 24px;
+    font-size: 18px;
     letter-spacing: 1px;
-    color: var(--text-color);
+    color: var(--sidebar_text_color);
     margin: 0;
 }
 
 .toggle-icon {
-    font-size: 26px;
+    font-size: 16px;
     cursor: pointer;
-    color: var(--text-color);
+    color: var(--sidebar_icon_color);
     margin-left: auto;
 }
 
@@ -62,7 +62,7 @@ ul.sub-menu {
 /* Active menu */
 
 li.menu-active a.has-arrow {
-    color: var(--primary-color);
+    color: var(--sidebar_a);
 }
 
 ul.show-menu {
@@ -76,7 +76,7 @@ ul.show-menu {
     padding: 10px;
     flex-direction: column;
     overflow-y: auto;
-    gap: 5px;
+    gap: 4px;
 }
 
 .metismenu li:first-child {
@@ -98,10 +98,10 @@ ul.show-menu {
     display: flex;
     align-items: center;
     justify-content: left;
-    padding: 10px 10px;
-    border-radius: 4px;
-    font-size: 15px;
-    color: var(--text-primary-color);
+    padding: 8px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+    color: var(--sidebar_text_color);
     outline-width: 0;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -110,7 +110,7 @@ ul.show-menu {
 }
 
 .metismenu a .parent-icon {
-    font-size: 25px;
+    font-size: 17px;
     line-height: 1;
 }
 
@@ -119,15 +119,15 @@ ul.show-menu {
 }
 
 .metismenu ul a {
-    padding: 6px 15px 6px 15px;
-    font-size: 15px;
+    padding: 4px 10px 4px 10px;
+    font-size: 12px;
     border: 0;
     border-left: 4px solid rgba(255, 255, 255, 0);
 }
 
 .metismenu ul a i {
     margin-right: 10px;
-    font-size: 18px;
+    font-size: 13px;
 }
 
 .metismenu ul {
@@ -138,7 +138,7 @@ ul.show-menu {
 .metismenu a:active,
 .metismenu a:focus,
 .metismenu a:hover {
-    color: var(--primary-color);
+    color: var(--sidebar_text_color);
     text-decoration: none;
     font-weight: 600;
     /* box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 50%); */
@@ -148,7 +148,7 @@ ul.show-menu {
 
 .menu-label {
     padding: 20px 15px 5px 5px;
-    color: var(--text-secondary-color);
+    color: var(--sidebar_text_color);
     text-transform: uppercase;
     font-size: 12px;
     letter-spacing: 0.5px;

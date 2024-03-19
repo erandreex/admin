@@ -1,7 +1,16 @@
 /**************************** Temas  ***********************************/
 
-.theme_day {
+:root {
+    --siderbar_backgroud_1: #1a2232;
+    --siderbar_backgroud_2: #ffffff;
+    --sidebar_text_color: #000000;
+    --sidebar_icon_color: #ffffff;
+    --sidebar_icon_color: #ffffff;
+    --sidebar_border_color: #2e2e2e;
+    --sidebar_a: #ffff00;
+}
 
+.theme_day {
     /* Text */
     --text-color: #080808;
     --anime-card-text: #ebeaea;
@@ -52,13 +61,11 @@
     /* Input */
     --submain-color: #1e1e1e;
 
-
     /* Errors */
     --error-bg-color: #bd2929;
 
     /* Exito */
     --exito-bg-color: #027600;
-
 }
 
 .theme_navy {
@@ -81,7 +88,6 @@
     /* Input */
     --submain-color: #22223b;
 
-
     /* Errors */
     --error-bg-color: #bd2929;
 
@@ -89,17 +95,11 @@
     --exito-bg-color: #027600;
 }
 
-
 /******************************************** Box        *********************************************/
-
 
 /******************************************** Background *********************************************/
 
-
 /******************************************** Texto       *********************************************/
-
-
-
 
 /******************************************** Text Size   ****************************************/
 
@@ -130,9 +130,7 @@
     --main-icon-size: 18px;
 }
 
-
 /******************************************** Colores ******************************************** */
-
 
 .color_red {
     --first-color: #a10036;
@@ -146,10 +144,8 @@
     --first-color: #f1612c;
 }
 
-
 .color_green {
     --first-color: #36a100;
-
 }
 
 .color_purple {

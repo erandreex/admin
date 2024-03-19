@@ -3,12 +3,14 @@ import { environment } from '../../environments/environment';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, map, of, tap } from 'rxjs';
 import { ModeloRespuesta } from '../Modelos/ModeloRespuesta';
+import { ModeloRespuestaLogin } from '../Paginas/login/ModeloLogin';
 
 @Injectable({
     providedIn: 'root',
 })
 export class AuthService {
-    public _auth: boolean = true;
+    public _auth: boolean = false;
+    public _firstTime: boolean = true;
 
     private baseUrl: string = environment.baseUrl;
 
@@ -22,11 +24,19 @@ export class AuthService {
         this._auth = value;
     }
 
-    login(credencial: string, password: string): Observable<ModeloRespuesta<any>> {
+    get firstTime(): boolean {
+        return this._firstTime;
+    }
+
+    set firstTime(value: boolean) {
+        this._firstTime = value;
+    }
+
+    login(credencial: string, password: string): Observable<ModeloRespuesta<ModeloRespuestaLogin>> {
         const url = `${this.baseUrl}/auth/login`;
         const body = { credencial, password };
 
-        return this.http.post<ModeloRespuesta<any>>(url, body).pipe(
+        return this.http.post<ModeloRespuesta<ModeloRespuestaLogin>>(url, body).pipe(
             tap((resp) => {
                 if (resp.ok) {
                     localStorage.setItem('token', resp.token);
@@ -35,6 +45,24 @@ export class AuthService {
             }),
             map((resp) => resp),
             catchError((err: HttpErrorResponse) => of(err.error))
+        );
+    }
+
+    validar(): Observable<ModeloRespuesta<any>> {
+        const url = `${this.baseUrl}/acceso/auth/validar`;
+
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        });
+
+        return this.http.get<ModeloRespuesta<any>>(url, { headers }).pipe(
+            tap((resp) => {
+                if (resp.ok) {
+                    this.auth = true;
+                }
+            }),
+            map((resp) => resp),
+            catchError((err) => of(err))
         );
     }
 
